@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -26,4 +27,20 @@ class OrderController extends Controller
 
         return response()->json($orders);
     }
+
+
+    public function updateStatus(Request $request)
+{
+ 
+
+    DB::table('orders')->where('id', $request->order_id)->update([
+        'status' => $request->status,
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Cập nhật trạng thái thành công!',
+    ]);
+}
+
 }

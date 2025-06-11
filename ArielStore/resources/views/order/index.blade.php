@@ -3,6 +3,47 @@
 @section('title', 'Quản lý đơn hàng')
 
 @section('content')
+
+<style>
+    /* Ô status canh giữa bằng flex */
+    td.status-cell {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    /* Màu các trạng thái */
+    .badge {
+        padding: 5px 10px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: white;
+    }
+
+    .status-donmoi {
+        background-color: #3B82F6;
+    }
+
+    .status-xacnhan {
+        background-color: #A0522D;
+        /* Màu nâu */
+    }
+
+    .status-danggiao {
+        background-color: purple;
+    }
+
+    .status-dagiao {
+        background-color: #22C55E;
+        /* Xanh lá */
+    }
+
+    .status-dahuy {
+        background-color: #E40B0B
+    }
+</style>
 <div style="background-color: #2C3E50; padding: 11px;">
     <h4 style="color: white;">Quản lý đơn hàng</h4>
 </div>
@@ -137,27 +178,128 @@
 
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('#ordersTable').DataTable({
+            searching: false,
             ajax: {
                 url: '/api/get-orders',
                 dataSrc: '' // API trả về mảng JSON
             },
-            columns: [
-                { data: 'id' },
-                { data: 'customer_name' },
-                { data: 'product_name' },
-                { data: 'total_amount' },
-                { data: 'status' },
-                { data: 'created_at' },
+            columns: [{
+                    data: 'id'
+                },
+                {
+                    data: 'customer_name'
+                },
+                {
+                    data: 'product_name'
+                },
+                {
+                    data: 'total_amount'
+                },
+                {
+                    data: 'status',
+                    className: 'status-cell',
+                    render: function(data, type, row) {
+                        let badge = '';
+
+                        switch (data) {
+                            case 'Đơn mới':
+                                badge = `<span class="badge status-donmoi">${data}</span>`;
+                                break;
+                            case 'Đang xử lý':
+                                badge = `<span class="badge status-xacnhan">${data}</span>`;
+                                break;
+                            case 'Đang giao':
+                                badge = `<span class="badge status-danggiao">${data}</span>`;
+                                break;
+                            case 'Hoàn thành':
+                                badge = `<span class="badge status-dagiao">${data}</span>`;
+                                break;
+                            case 'Đã hủy':
+                                badge = `<span class="badge status-dahuy">${data}</span>`;
+                                break;
+                            default:
+                                badge = `<span class="badge">${data}</span>`;
+                        }
+
+                        return badge;
+                    }
+                },
+
+                {
+                    data: 'created_at'
+                },
                 {
                     data: null,
-                    render: function (data, type, row) {
-                        return `<button class="btn btn-sm btn-primary">Xem</button>`;
+                    render: function(data, type, row) {
+                        let button = '';
+                        let icon = `<i class="fa-solid fa-circle-info  fs-5 me-2"></i>`;
+
+                        switch (row.status) {
+                            case 'Đơn mới':
+                                button = `<button class="btn btn-sm text-white fw-bold shadow-sm btn-action" 
+                            style="background-color: #3B82F6; border-radius: 12px;"
+                            data-id="${row.id}" data-status="2">
+                            Xác nhận
+                          </button>`;
+                                break;
+
+                            case 'Đang xử lý':
+                                button = `<button class="btn btn-sm text-white fw-bold shadow-sm btn-action" 
+                            style="background-color: #A0522D; border-radius: 12px; margin-left: 20px"
+                            data-id="${row.id}" data-status="3">
+                            Giao hàng
+                          </button>`;
+                                break;
+
+                            case 'Đang giao':
+                                button = `<button class="btn btn-sm text-white fw-bold shadow-sm btn-action" 
+                            style="background-color: #22C55E; border-radius: 12px;"
+                            data-id="${row.id}" data-status="4">
+                            Hoàn thành
+                          </button>`;
+                                break;
+
+                            default:
+                                return `
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                        ${icon}
+                    </div>
+                `;
+                        }
+
+                        return `
+            <div class="d-flex justify-content-between align-items-center gap-2">
+                ${icon}
+                ${button}
+            </div>
+        `;
                     }
                 }
+
+
             ]
+        });
+
+        $(document).on('click', '.btn-action', function() {
+
+            let id = $(this).data('id');
+            let status = $(this).data('status');
+
+            $.ajax({
+                url: '/api/update-status',
+                type: 'POST',
+                data: {
+                    order_id: id,
+                    status: status,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                    $('#ordersTable').DataTable().ajax.reload(); // reload lại bảng
+                }
+            });
         });
     });
 </script>
-
