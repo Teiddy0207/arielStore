@@ -5,6 +5,44 @@
     <title>@yield('title', 'Ariel Store')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
+  <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .layout-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: white;
+            border-right: 1px solid #ccc;
+            padding: 20px;
+        }
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            height: 70px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        main {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+    </style>
 <body>
 
     {{-- Header luôn nằm trên cùng, full width --}}
@@ -16,7 +54,7 @@
         @include('layouts.sidebar')
 
         {{-- Nội dung chính --}}
-        <div class="flex-grow-1 p-4">
+        <div class="flex-grow-1">
             @yield('content')
         </div>
     </div>

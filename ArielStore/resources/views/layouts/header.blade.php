@@ -1,5 +1,5 @@
 <!-- Header -->
-<div class="header d-flex justify-content-between align-items-center p-4 bg-light shadow-sm" style="height: 80px;">
+<div class="header d-flex justify-content-between align-items-center p-5 bg-light shadow-sm" style="height: 80px;">
     {{-- Logo bên trái --}}
     <div class="d-flex align-items-center">
         <img src="{{ asset('images/logoAeriel.png') }}" alt="Logo" style="height: 50px;">
