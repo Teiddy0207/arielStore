@@ -8,4 +8,5 @@ use  App\Http\Controllers\DashboardController;
 
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('/api/get-orders', [OrderController::class, 'getOrder']);
 
