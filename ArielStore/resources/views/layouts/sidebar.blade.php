@@ -18,10 +18,10 @@
 <div class="sidebar bg-white border-end" style="width: 200px; min-height: 100vh; padding: 20px;">
 
     <ul class="nav flex-column">
-        <li class="nav-item mb-2"><a href="#" class="nav-link">Trang chủ</a></li>
-        <li class="nav-item mb-2"><a href="#" class="nav-link">Quản lý đơn hàng</a></li>
-        <li class="nav-item mb-2"><a href="#" class="nav-link">Quản lý sản phẩm</a></li>
-        <li class="nav-item mb-2"><a href="#" class="nav-link">Quản lý nhân viên</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Báo cáo doanh thu</a></li>
+        <li class="nav-item mb-2"><a href="{{ route('dashboard.index') }}"  class="nav-link">Trang chủ</a></li>
+        <li class="nav-item mb-2"><a href="{{ route('orders.index') }}" class="nav-link">Quản lý đơn hàng</a></li>
+        <li class="nav-item mb-2"><a  class="nav-link">Quản lý sản phẩm</a></li>
+        <li class="nav-item mb-2"><a  class="nav-link">Quản lý nhân viên</a></li>
+        <li class="nav-item"><a  class="nav-link">Báo cáo doanh thu</a></li>
     </ul>
 </div>

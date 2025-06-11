@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Quản lý đơn hàng')
+@section('title')
 
 @section('content')
-
+heheh 
     </table>
 @endsection
