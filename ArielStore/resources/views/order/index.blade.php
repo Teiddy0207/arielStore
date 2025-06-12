@@ -43,6 +43,15 @@
     .status-dahuy {
         background-color: #E40B0B
     }
+
+
+    .bg-brown {
+    background-color: #A0522D !important; /* nâu */
+}
+
+.bg-purple {
+    background-color: #6f42c1 !important; /* tím */
+}
 </style>
 <div style="background-color: #2C3E50; padding: 11px;">
     <h4 style="color: white;">Quản lý đơn hàng</h4>
@@ -168,6 +177,24 @@
     </table>
 </div>
 
+
+<!-- modal -->
+
+<div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderDetailModalLabel">Chi tiết đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body" id="orderDetailContent">
+                <!-- Nội dung chi tiết đơn hàng sẽ được thêm bằng JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @endsection
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -234,7 +261,7 @@
                     data: null,
                     render: function(data, type, row) {
                         let button = '';
-                        let icon = `<i class="fa-solid fa-circle-info  fs-5 me-2"></i>`;
+                        let icon = `<i class="fa-solid fa-circle-info fs-5 me-2  view-order-detail" data-id="${row.id}" style="cursor:pointer;"></i>`;
 
                         switch (row.status) {
                             case 'Đơn mới':
@@ -301,5 +328,137 @@
                 }
             });
         });
+
+
+        $('#ordersTable').on('click', '.view-order-detail', function() {
+            const orderId = $(this).data('id');
+
+            $.ajax({
+                url: `/api/order-detail/${orderId}`,
+                method: 'GET',
+                success: function(data) {
+                    const o = data.order;
+                    const d = data.detail ?? {};
+
+
+
+    const statusClass = (() => {
+        switch (o.status) {
+            case "Đơn mới": return "bg-primary";
+            case "Đang xử lý": return "bg-brown";
+            case "Đang giao": return "bg-purple";
+            case "Hoàn thành": return "bg-success";
+            case "Đã hủy": return "bg-danger";
+            default: return "bg-secondary";
+        }
+    })();
+
+                    $('#orderDetailContent').html(`
+                <h5><strong>Chi tiết đơn hàng ${o.id}</strong></h5>
+                <div style="border: 2px solid #2196f3; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h6><i class="bi bi-person-fill"></i> Thông tin khách hàng</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><i class="bi bi-person"></i> ${o.customer_name}</p>
+                            <p><i class="bi bi-envelope"></i> ${d?.email ?? 'Không có'}</p>
+                            <p><i class="bi bi-geo-alt"></i> ${d?.address ?? 'Không rõ'}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><i class="bi bi-telephone"></i> ${d?.phone ?? 'Không có'}</p>
+                            <p><i class="bi bi-calendar-event"></i> ${o.created_at}</p>
+                            <p><strong>Ghi chú:</strong> ${d?.note ?? 'Không có'}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h6> <strong><i class="bi bi-box-seam"></i> Sản phẩm đặt hàng </strong></h6>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Đơn giá</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${o.product_name}</td>
+                                <td>${d?.quantity ?? 1}</td>
+                                <td>${Number(d.price).toLocaleString()} VND</td>
+                                <td>${Number(o.total_amount).toLocaleString()} VND</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                            <div class = "d-flex justify-content-between">
+                            <div>
+                    <p>Tổng cộng: </p>
+                    <p>Phương thức thanh toán:</p>
+                            </div>
+                              <div>
+
+<p> ${Number(o.total_amount ?? 0).toLocaleString()} VND</p>
+<p class="text-end">${o.payment_method ?? 'COD'}</p>
+   </div>             
+</div>
+</div>
+
+             <div>
+  <h6> 
+    <strong><i class="bi bi-arrow-repeat"></i> Cập nhật trạng thái đơn hàng </strong>
+  </h6>
+ <span class="badge text-white ${statusClass}">${o.status}</span>
+<div class="mt-2">
+  ${o.status === "Đơn mới" ? `
+    <button class="btn btn-success me-2 btn-update-status"
+            data-id="${o.id}" data-status="2">
+      Xác nhận
+    </button>` : ''}
+
+  ${o.status === "Đơn mới" ? `
+    <button class="btn btn-danger btn-update-status"
+            data-id="${o.id}" data-status="Đã hủy">
+      Hủy đơn
+    </button>` : ''}
+</div>
+
+</div>
+
+            `);
+
+                    $('#orderDetailModal').modal('show');
+                },
+                error: function() {
+                    alert('Không thể tải chi tiết đơn hàng.');
+                }
+            });
+        });
+
+$(document).on('click', '.btn-update-status', function () {
+    const id = $(this).data('id');
+    const newStatus = $(this).data('status');
+
+    $.ajax({
+        url: '/api/update-status',
+        method: 'POST',
+        data: {
+            order_id: id,
+            status: newStatus,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function (response) {
+            alert(response.message);
+            $('#ordersTable').DataTable().ajax.reload();
+            $('#orderDetailModal').modal('hide'); 
+        },
+        error: function () {
+            alert('Lỗi khi cập nhật trạng thái!');
+        }
+    });
+});
+
+
     });
 </script>

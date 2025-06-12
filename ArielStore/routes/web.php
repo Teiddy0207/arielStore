@@ -11,3 +11,4 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/api/get-orders', [OrderController::class, 'getOrder']);
 Route::post('/api/update-status', [OrderController::class, 'updateStatus']);
 
+Route::get('/api/order-detail/{id}', [OrderController::class, 'getOrderDetail']);
