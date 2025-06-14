@@ -8,6 +8,6 @@ class UserPageController extends Controller
 {
     public function index()
     {
-        
+        return view('userpage.index');
     }
 }
