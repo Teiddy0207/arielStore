@@ -16,7 +16,7 @@
         <section>
          <h2 class="text-2xl font-bold mb-6 text-center">Danh mục sản phẩm</h2>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-x-40 gap-y-20  p-5">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-80 gap-y-20  p-5">
     <!-- Product Card 1 -->
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <img src="{{ asset('images/aoAriel.png') }}" alt="Áo" class="w-full h-150 object-cover">
