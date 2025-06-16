@@ -72,11 +72,11 @@
             <div class="card text-center shadow-sm">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title">Đơn mới</h5>
+                        <h5 class="card-title" style="color: 3069EB">Đơn mới</h5>
                         <p class="card-text text-primary" style="font-size: 20px;">12</p>
                     </div>
                     <div class="">
-                        <i class="fas fa-clock fa-2x mb-2" style="color:#2c3e50"></i>
+                        <i class="fas fa-clock fa-2x mb-2" style="color: 3069EB"></i>
                     </div>
                 </div>
             </div>
@@ -88,11 +88,11 @@
 
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title">Đang xử lý</h5>
-                        <p class="card-text" style="font-size: 20px; color: #2c3e50">12</p>
+                        <h5 class="card-title" style="color: CA8A03">Đang xử lý</h5>
+                        <p class="card-text" style="font-size: 20px; color: CA8A03">12</p>
                     </div>
                     <div class="">
-                        <i class="fas fa-box-open fa-2x mb-2 " style="color:#2c3e50"></i>
+                        <i class="fas fa-box-open fa-2x mb-2 " style="color: CA8A03"></i>
                     </div>
                 </div>
             </div>
@@ -104,11 +104,11 @@
 
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title">Đang giao</h5>
-                        <p class="card-text" style="font-size: 20px; color: #2c3e50">12</p>
+                        <h5 class="card-title" style="color: 983EEA">Đang giao</h5>
+                        <p class="card-text" style="font-size: 20px; color: 983EEA">12</p>
                     </div>
                     <div class="">
-                        <i class="fas fa-truck fa-2x mb-2 " style="color: #2c3e50"></i>
+                        <i class="fas fa-truck fa-2x mb-2 " style="color: 983EEA"></i>
                     </div>
                 </div>
             </div>
@@ -120,11 +120,11 @@
 
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title">Hoàn thành</h5>
-                        <p class="card-text" style="font-size: 20px; color:#2c3e50">12</p>
+                        <h5 class="card-title" style="color: 1DA550">Hoàn thành</h5>
+                        <p class="card-text" style="font-size: 20px; color: 1DA550">12</p>
                     </div>
                     <div class="">
-                        <i class="fas fa-check-circle fa-2x mb-2"  style="color:#2c3e50"></i>
+                        <i class="fas fa-check-circle fa-2x mb-2" style="color: 1DA550"></i>
                     </div>
                 </div>
             </div>
@@ -147,21 +147,24 @@
     </div>
 
     <!-- Dropdown lọc trạng thái -->
-    <div style="margin-right: 40px">
-        <div class="dropdown">
-            <button class="btn btn-light rounded-pill px-4 py-2 dropdown-toggle border-0 " type="button" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownStatus" >
-                <i class="fas fa-filter me-1 "></i> Tất cả trạng thái
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item filter-option" data-status=""> Tất cả trạng thái</a></li>
-                <li><a class="dropdown-item filter-option" data-status="Đơn mới">Đơn mới</a></li>
-                <li><a class="dropdown-item filter-option" data-status="Đang xử lý">Đang xử lý</a></li>
-                <li><a class="dropdown-item filter-option" data-status="Đang giao">Đang giao</a></li>
-                <li><a class="dropdown-item filter-option" data-status="Hoàn thành">Hoàn thành</a></li>
-                <li><a class="dropdown-item filter-option" data-status="Đã hủy">Đã hủy</a></li>
-            </ul>
-        </div>
+<div style="margin-right: 40px">
+    <div class="dropdown">
+        <button class="btn btn-light rounded-pill px-4 py-2 dropdown-toggle border-0" 
+                type="button" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownStatus">
+            <i class="fas fa-filter me-1"></i> 
+            <span class="dropdown-label">Tất cả trạng thái</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item filter-option" data-status="">Tất cả trạng thái</a></li>
+            <li><a class="dropdown-item filter-option" data-status="Đơn mới">Đơn mới</a></li>
+            <li><a class="dropdown-item filter-option" data-status="Đang xử lý">Đang xử lý</a></li>
+            <li><a class="dropdown-item filter-option" data-status="Đang giao">Đang giao</a></li>
+            <li><a class="dropdown-item filter-option" data-status="Hoàn thành">Hoàn thành</a></li>
+            <li><a class="dropdown-item filter-option" data-status="Đã hủy">Đã hủy</a></li>
+        </ul>
     </div>
+</div>
+
 </div>
 
 <h4 class="mt-4" style="margin-left: 40px;">Danh sách đơn hàng</h4>
@@ -180,7 +183,7 @@
                 <th>Ngày tạo</th>
                 <th></th>
                 <th>Thao tác</th>
-            
+
             </tr>
         </thead>
     </table>
@@ -197,7 +200,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
             <div class="modal-body" id="orderDetailContent">
-                <!-- Nội dung chi tiết đơn hàng sẽ được thêm bằng JavaScript -->
             </div>
         </div>
     </div>
@@ -205,12 +207,14 @@
 
 
 @endsection
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Trong <head> -->
+<!-- CSS đặt trong <head> -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Script đặt ở cuối file, trước </body> -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
 
 
 <script>
@@ -277,7 +281,7 @@
         `;
                     }
                 },
-                                {
+                {
                     data: null,
                     render: function(data, type, row) {
                         let button = '';
@@ -285,7 +289,7 @@
                         switch (row.status) {
                             case 'Đơn mới':
                                 button = `<button class="btn btn-sm text-white fw-bold shadow-sm btn-action" 
-                            style="background-color: #1abc9c; border-radius: 12px;"
+                            style="background-color: 3069EB; border-radius: 12px;"
                             data-id="${row.id}" data-status="2">
                             Xác nhận
                           </button>`;
@@ -293,7 +297,7 @@
 
                             case 'Đang xử lý':
                                 button = `<button class="btn btn-sm text-white fw-bold shadow-sm btn-action" 
-                            style="background-color: #1abc9c; border-radius: 12px; "
+                            style="background-color: CA8A03; border-radius: 12px; "
                             data-id="${row.id}" data-status="3">
                             Giao hàng
                           </button>`;
@@ -301,7 +305,7 @@
 
                             case 'Đang giao':
                                 button = `<button class="btn btn-sm text-white fw-bold shadow-sm btn-action" 
-                            style="background-color: #1abc9c; border-radius: 12px;"
+                            style="background-color: 1DA550; border-radius: 12px;"
                             data-id="${row.id}" data-status="4">
                             Hoàn thành
                           </button>`;
@@ -338,19 +342,21 @@
             ]
         });
 
-        $('.filter-option').on('click', function(e) {
-            e.preventDefault();
 
-            const status = $(this).data('status');
-            const text = $(this).text().trim();
+   $('.filter-option').on('click', function(e) {
+    e.preventDefault();
 
-            // ✅ Cập nhật nội dung nút dropdown
-            $('#dropdownStatus').text(text);
+    const status = $(this).data('status');
+    const text = $(this).text().trim();
 
-            // ✅ Gọi lại ajax để load dữ liệu theo trạng thái
-            const url = '/api/get-orders' + (status ? `?status=${encodeURIComponent(status)}` : '');
-            table.ajax.url(url).load();
-        });
+    // ✅ Cập nhật chỉ phần label để giữ icon và class
+    $('#dropdownStatus .dropdown-label').text(text);
+
+    // ✅ Gửi lại request để reload bảng với filter mới
+    const url = '/api/get-orders' + (status ? `?status=${encodeURIComponent(status)}` : '');
+    table.ajax.url(url).load();
+});
+
 
         $(document).on('click', '.btn-action', function() {
 
