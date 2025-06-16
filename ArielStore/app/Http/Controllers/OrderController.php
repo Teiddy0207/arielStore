@@ -11,21 +11,26 @@ class OrderController extends Controller
         return view('order.index');
     }
 
-    public function getOrder()
+    public function getOrder(Request $request)
     {
-        $orders = DB::table('orders')
-            ->join('statuses', 'orders.status', '=', 'statuses.id')
-            ->select(
-                'orders.id',
-                'orders.customer_name',
-                'orders.product_name',
-                'orders.total_amount',
-                'statuses.description as status',
-                'orders.created_at'
-            )
-            ->get();
+        $status = $request->query('status');
 
-        return response()->json($orders);
+    $query = DB::table('orders')
+        ->join('statuses', 'orders.status', '=', 'statuses.id')
+        ->select(
+            'orders.id',
+            'orders.customer_name',
+            'orders.product_name',
+            'orders.total_amount',
+            'statuses.description as status',
+            'orders.created_at'
+        );
+
+    if ($status) {
+        $query->where('statuses.description', $status);
+    }
+
+    return response()->json($query->get());
     }
 
 
@@ -61,8 +66,6 @@ public function getOrderDetail($id)
         ->first();
 
     $orderDetail = DB::table('order_details')
-        ->join('statuses', 'order_details.status', '=', 'statuses.id')
-        ->where('order_details.order_id', $id)
         ->select(
             'order_details.note',
             'order_details.phone',
@@ -71,7 +74,6 @@ public function getOrderDetail($id)
                         'order_details.email',
                         'order_details.price',
 
-            'statuses.description as status'
         )
         ->first();
 
@@ -81,4 +83,9 @@ public function getOrderDetail($id)
     ]);
 }
 
+
+public function filterStatus()
+{
+    
+}
 }
