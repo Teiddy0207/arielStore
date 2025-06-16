@@ -3,7 +3,7 @@
 @section('title', 'Quản lý đơn hàng')
 
 @section('content')
-
+<!-- TEST  ddded --> 
 <style>
     /* Ô status canh giữa bằng flex */
     td.status-cell {
@@ -23,42 +23,35 @@
     }
 
     .status-donmoi {
-        color: rgb(0, 0, 0);
-
+        background-color: #3B82F6;
     }
 
     .status-xacnhan {
-        color: rgb(0, 0, 0);
-
+        background-color: #A0522D;
+        /* Màu nâu */
     }
 
     .status-danggiao {
-        color: rgb(0, 0, 0);
-
+        background-color: purple;
     }
 
     .status-dagiao {
-
-        color: rgb(0, 0, 0);
-
-
+        background-color: #22C55E;
+        /* Xanh lá */
     }
 
     .status-dahuy {
-        color: rgb(0, 0, 0);
-
+        background-color: #E40B0B
     }
 
 
     .bg-brown {
-        background-color: #A0522D !important;
-        /* nâu */
-    }
+    background-color: #A0522D !important; /* nâu */
+}
 
-    .bg-purple {
-        background-color: #6f42c1 !important;
-        /* tím */
-    }
+.bg-purple {
+    background-color: #6f42c1 !important; /* tím */
+}
 </style>
 <div style="background-color: #2C3E50; padding: 11px;">
     <h4 style="color: white;">Quản lý đơn hàng</h4>
@@ -76,7 +69,7 @@
                         <p class="card-text text-primary" style="font-size: 20px;">12</p>
                     </div>
                     <div class="">
-                        <i class="fas fa-clock fa-2x mb-2" style="color:#2c3e50"></i>
+                        <i class="fas fa-clock fa-2x mb-2 text-primary"></i>
                     </div>
                 </div>
             </div>
@@ -89,10 +82,10 @@
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="card-title">Đang xử lý</h5>
-                        <p class="card-text" style="font-size: 20px; color: #2c3e50">12</p>
+                        <p class="card-text" style="font-size: 20px; color: #f39c12;">12</p>
                     </div>
                     <div class="">
-                        <i class="fas fa-box-open fa-2x mb-2 " style="color:#2c3e50"></i>
+                        <i class="fas fa-box-open fa-2x mb-2 text-warning"></i>
                     </div>
                 </div>
             </div>
@@ -105,10 +98,10 @@
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="card-title">Đang giao</h5>
-                        <p class="card-text" style="font-size: 20px; color: #2c3e50">12</p>
+                        <p class="card-text" style="font-size: 20px; color: #9b59b6;">12</p>
                     </div>
                     <div class="">
-                        <i class="fas fa-truck fa-2x mb-2 " style="color: #2c3e50"></i>
+                        <i class="fas fa-truck fa-2x mb-2 " style="color: #9b59b6"></i>
                     </div>
                 </div>
             </div>
@@ -121,10 +114,10 @@
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="card-title">Hoàn thành</h5>
-                        <p class="card-text" style="font-size: 20px; color:#2c3e50">12</p>
+                        <p class="card-text" style="font-size: 20px; color: #2ecc71">12</p>
                     </div>
                     <div class="">
-                        <i class="fas fa-check-circle fa-2x mb-2"  style="color:#2c3e50"></i>
+                        <i class="fas fa-check-circle fa-2x mb-2 text-success"></i>
                     </div>
                 </div>
             </div>
@@ -149,16 +142,16 @@
     <!-- Dropdown lọc trạng thái -->
     <div style="margin-right: 40px">
         <div class="dropdown">
-            <button class="btn btn-light rounded-pill px-4 py-2 dropdown-toggle border-0 " type="button" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownStatus" >
-                <i class="fas fa-filter me-1 "></i> Tất cả trạng thái
+            <button class="btn btn-light rounded-pill px-4 py-2 dropdown-toggle border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-filter me-1"></i> Tất cả trạng thái
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item filter-option" data-status=""> Tất cả trạng thái</a></li>
-                <li><a class="dropdown-item filter-option" data-status="Đơn mới">Đơn mới</a></li>
-                <li><a class="dropdown-item filter-option" data-status="Đang xử lý">Đang xử lý</a></li>
-                <li><a class="dropdown-item filter-option" data-status="Đang giao">Đang giao</a></li>
-                <li><a class="dropdown-item filter-option" data-status="Hoàn thành">Hoàn thành</a></li>
-                <li><a class="dropdown-item filter-option" data-status="Đã hủy">Đã hủy</a></li>
+                <li><a class="dropdown-item" href="#">Đơn mới</a></li>
+                <li><a class="dropdown-item" href="#">Đang xử lý</a></li>
+                <li><a class="dropdown-item" href="#">Đang giao</a></li>
+                <li><a class="dropdown-item" href="#">Hoàn thành</a></li>
+                <li><a class="dropdown-item" href="#">Đã hủy</a></li>
+
             </ul>
         </div>
     </div>
@@ -178,9 +171,7 @@
                 <th>Tổng tiền</th>
                 <th>Trạng thái</th>
                 <th>Ngày tạo</th>
-                <th></th>
                 <th>Thao tác</th>
-            
             </tr>
         </thead>
     </table>
@@ -215,7 +206,7 @@
 
 <script>
     $(document).ready(function() {
-        let table = $('#ordersTable').DataTable({
+        $('#ordersTable').DataTable({
             searching: false,
             ajax: {
                 url: '/api/get-orders',
@@ -269,23 +260,13 @@
                 {
                     data: null,
                     render: function(data, type, row) {
-                        let icon = `<i class="fa-solid fa-circle-info fs-5 me-2  view-order-detail" data-id="${row.id}" style="cursor:pointer;"></i>`;
-                        return `
-            <div class="d-flex justify-content-center align-items-center gap-2">
-                ${icon}
-            </div>
-        `;
-                    }
-                },
-                                {
-                    data: null,
-                    render: function(data, type, row) {
                         let button = '';
-                        let text = '';
+                        let icon = `<i class="fa-solid fa-circle-info fs-5 me-2  view-order-detail" data-id="${row.id}" style="cursor:pointer;"></i>`;
+
                         switch (row.status) {
                             case 'Đơn mới':
                                 button = `<button class="btn btn-sm text-white fw-bold shadow-sm btn-action" 
-                            style="background-color: #1abc9c; border-radius: 12px;"
+                            style="background-color: #3B82F6; border-radius: 12px;"
                             data-id="${row.id}" data-status="2">
                             Xác nhận
                           </button>`;
@@ -293,7 +274,7 @@
 
                             case 'Đang xử lý':
                                 button = `<button class="btn btn-sm text-white fw-bold shadow-sm btn-action" 
-                            style="background-color: #1abc9c; border-radius: 12px; "
+                            style="background-color: #A0522D; border-radius: 12px; margin-left: 20px"
                             data-id="${row.id}" data-status="3">
                             Giao hàng
                           </button>`;
@@ -301,55 +282,31 @@
 
                             case 'Đang giao':
                                 button = `<button class="btn btn-sm text-white fw-bold shadow-sm btn-action" 
-                            style="background-color: #1abc9c; border-radius: 12px;"
+                            style="background-color: #22C55E; border-radius: 12px;"
                             data-id="${row.id}" data-status="4">
                             Hoàn thành
                           </button>`;
-                                break;
-                            case 'Hoàn thành':
-                                text = `<div class="text-black fw-bold shadow-sm" 
-                           style="opacity: 0.5;">
-                          
-                          </div>`;
-                                break;
-                            case 'Đã hủy':
-                                text = `<div class="text-black fw-bold shadow-sm" 
-                           style="opacity: 0.5;">
-                   
-                          </div>`;
                                 break;
 
                             default:
                                 return `
                     <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
-                      
+                        ${icon}
                     </div>
                 `;
                         }
 
                         return `
-            <div class="d-flex justify-content-center align-items-center gap-2">
-               
- ${button || text}            
- </div>
+            <div class="d-flex justify-content-between align-items-center gap-2">
+                ${icon}
+                ${button}
+            </div>
         `;
                     }
-                },
+                }
+
+
             ]
-        });
-
-        $('.filter-option').on('click', function(e) {
-            e.preventDefault();
-
-            const status = $(this).data('status');
-            const text = $(this).text().trim();
-
-            // ✅ Cập nhật nội dung nút dropdown
-            $('#dropdownStatus').text(text);
-
-            // ✅ Gọi lại ajax để load dữ liệu theo trạng thái
-            const url = '/api/get-orders' + (status ? `?status=${encodeURIComponent(status)}` : '');
-            table.ajax.url(url).load();
         });
 
         $(document).on('click', '.btn-action', function() {
@@ -385,22 +342,16 @@
 
 
 
-                    const statusClass = (() => {
-                        switch (o.status) {
-                            case "Đơn mới":
-                                return "bg-primary";
-                            case "Đang xử lý":
-                                return "bg-brown";
-                            case "Đang giao":
-                                return "bg-purple";
-                            case "Hoàn thành":
-                                return "bg-success";
-                            case "Đã hủy":
-                                return "bg-danger";
-                            default:
-                                return "bg-secondary";
-                        }
-                    })();
+    const statusClass = (() => {
+        switch (o.status) {
+            case "Đơn mới": return "bg-primary";
+            case "Đang xử lý": return "bg-brown";
+            case "Đang giao": return "bg-purple";
+            case "Hoàn thành": return "bg-success";
+            case "Đã hủy": return "bg-danger";
+            default: return "bg-secondary";
+        }
+    })();
 
                     $('#orderDetailContent').html(`
                 <h5><strong>Chi tiết đơn hàng ${o.id}</strong></h5>
@@ -467,10 +418,8 @@
     </button>` : ''}
 
   ${o.status === "Đơn mới" ? `
-    <button class="btn  btn-update-status"
-            data-id="${o.id}" data-status="Đã hủy"
-            style = "background-color: #e74c3c "
-            >
+    <button class="btn btn-danger btn-update-status"
+            data-id="${o.id}" data-status="Đã hủy">
       Hủy đơn
     </button>` : ''}
 </div>
@@ -487,28 +436,28 @@
             });
         });
 
-        $(document).on('click', '.btn-update-status', function() {
-            const id = $(this).data('id');
-            const newStatus = $(this).data('status');
+$(document).on('click', '.btn-update-status', function () {
+    const id = $(this).data('id');
+    const newStatus = $(this).data('status');
 
-            $.ajax({
-                url: '/api/update-status',
-                method: 'POST',
-                data: {
-                    order_id: id,
-                    status: newStatus,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    alert(response.message);
-                    $('#ordersTable').DataTable().ajax.reload();
-                    $('#orderDetailModal').modal('hide');
-                },
-                error: function() {
-                    alert('Lỗi khi cập nhật trạng thái!');
-                }
-            });
-        });
+    $.ajax({
+        url: '/api/update-status',
+        method: 'POST',
+        data: {
+            order_id: id,
+            status: newStatus,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function (response) {
+            alert(response.message);
+            $('#ordersTable').DataTable().ajax.reload();
+            $('#orderDetailModal').modal('hide'); 
+        },
+        error: function () {
+            alert('Lỗi khi cập nhật trạng thái!');
+        }
+    });
+});
 
 
     });
