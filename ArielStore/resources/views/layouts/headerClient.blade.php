@@ -15,25 +15,25 @@
             </button>
 
             <!-- Navigation Menu -->
-      <nav class="d-flex gap-4">
-    <!-- Dropdown Danh mục -->
-    <div class="dropdown">
-        <a class="dropdown-toggle text-secondary text-decoration-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Danh mục
-        </a>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Áo</a></li>
-            <li><a class="dropdown-item" href="#">Quần</a></li>
-            <li><a class="dropdown-item" href="#">Váy</a></li>
-            <li><a class="dropdown-item" href="#">Phụ kiện</a></li>
-        </ul>
-    </div>
+            <nav class="d-flex gap-4">
+                <!-- Dropdown Danh mục -->
+                <div class="dropdown">
+                    <a class="dropdown-toggle text-secondary text-decoration-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Danh mục
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ route('userpage.shirt') }}">Áo</a></li>
+                        <li><a class="dropdown-item" href="{{ route('userpage.pant') }}">Quần</a></li>
+                        <li><a class="dropdown-item" href="{{ route('userpage.skirt') }}">Váy</a></li>
+                        <li><a class="dropdown-item" href="{{ route('userpage.accessories') }}">Phụ kiện</a></li>
+                    </ul>
+                </div>
 
-    <!-- Các mục khác -->
-    <a href="#" class="text-secondary text-decoration-none">Tất cả sản phẩm</a>
-    <a href="#" class="text-secondary text-decoration-none">Sale off</a>
-    <a href="#" class="text-secondary text-decoration-none">Hàng mới về</a>
-</nav>
+                <!-- Các mục khác -->
+                <a href="{{ route('userpage.all') }}" class="text-secondary text-decoration-none">Tất cả sản phẩm</a>
+                <a href="{{ route('userpage.sale') }}" class="text-secondary text-decoration-none">Sale off</a>
+                <a href="{{ route('userpage.new') }}" class="text-secondary text-decoration-none">Hàng mới về</a>
+            </nav>
 
 
             <!-- Cart Icon -->
