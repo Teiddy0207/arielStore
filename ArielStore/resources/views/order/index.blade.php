@@ -51,7 +51,7 @@
 
 
     .bg-brown {
-        background-color: #A0522D !important;
+        background-color: #CA8A03 !important;
         /* nâu */
     }
 
@@ -474,8 +474,8 @@
 
   ${o.status === "Đơn mới" ? `
     <button class="btn  btn-update-status"
-            data-id="${o.id}" data-status="Đã hủy"
-            style = "background-color: #e74c3c "
+            data-id="${o.id}" data-status="5"
+            style = "background-color: #e74c3c ;color: ffffff"
             >
       Hủy đơn
     </button>` : ''}
