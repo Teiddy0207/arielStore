@@ -3,7 +3,11 @@
 @section('title', 'Quản lý đơn hàng')
 
 @section('content')
+<<<<<<< Updated upstream
 <!-- TEST  ddded -->
+=======
+
+>>>>>>> Stashed changes
 <style>
     /* Ô status canh giữa bằng flex */
     td.status-cell {
