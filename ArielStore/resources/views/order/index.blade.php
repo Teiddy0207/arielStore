@@ -178,8 +178,9 @@
                 <th>Tổng tiền</th>
                 <th>Trạng thái</th>
                 <th>Ngày tạo</th>
+                <th></th>
                 <th>Thao tác</th>
-                <th>chi tiết đơn hàng</th>
+            
             </tr>
         </thead>
     </table>
@@ -268,6 +269,17 @@
                 {
                     data: null,
                     render: function(data, type, row) {
+                        let icon = `<i class="fa-solid fa-circle-info fs-5 me-2  view-order-detail" data-id="${row.id}" style="cursor:pointer;"></i>`;
+                        return `
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                ${icon}
+            </div>
+        `;
+                    }
+                },
+                                {
+                    data: null,
+                    render: function(data, type, row) {
                         let button = '';
                         let text = '';
                         switch (row.status) {
@@ -297,13 +309,13 @@
                             case 'Hoàn thành':
                                 text = `<div class="text-black fw-bold shadow-sm" 
                            style="opacity: 0.5;">
-                            Hoàn thành
+                          
                           </div>`;
                                 break;
                             case 'Đã hủy':
                                 text = `<div class="text-black fw-bold shadow-sm" 
                            style="opacity: 0.5;">
-                           Đã hủy
+                   
                           </div>`;
                                 break;
 
@@ -323,17 +335,6 @@
         `;
                     }
                 },
-                {
-                    data: null,
-                    render: function(data, type, row) {
-                        let icon = `<i class="fa-solid fa-circle-info fs-5 me-2  view-order-detail" data-id="${row.id}" style="cursor:pointer;"></i>`;
-                        return `
-            <div class="d-flex justify-content-center align-items-center gap-2">
-                ${icon}
-            </div>
-        `;
-                    }
-                }
             ]
         });
 

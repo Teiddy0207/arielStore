@@ -59,7 +59,7 @@
         </li>
 
         <li class="nav-item">
-            <a href="" class="nav-link">
+            <a href="{{ route('products.index') }}" class="nav-link {{ Route::is('products.*') ? 'active' : '' }}">
                 Quản lý sản phẩm
             </a>
         </li>
