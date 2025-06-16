@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
-<!-- Nhìn thấy cái file client này không  -->
- <!-- Cái này là để gọi header , fofoot, content trong   trang của  đấy  -->
-  <!-- Trong này nó có thư viện , thì cái header gọi như anh gọi nó mới dùng được  -->
+
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'Ariel Store')</title>
@@ -22,7 +20,6 @@
     @yield('content')
     @include('layouts.footerClient')
 
-    <!-- Đây là phần nội dung trong trang của  bao gồm header foooter và content  -->
 
 </body>
 
