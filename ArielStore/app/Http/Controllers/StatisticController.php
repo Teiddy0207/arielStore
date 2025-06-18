@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class StatisticController extends Controller
+{
+    public function index(){
+
+    }
+    public function customer(){
+        return view('statistic.customer');
+    }
+    public function inventory(){
+        return view('statistic.inventory');
+    }
+    public function sales(){
+        return view('statistic.sales');
+    }
+}

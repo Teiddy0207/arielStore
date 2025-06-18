@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StatisticController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use  App\Http\Controllers\DashboardController;
@@ -30,11 +31,17 @@ Route::middleware(['employee.auth'])->group(function () {
     Route::get('/api/get-orders', [OrderController::class, 'getOrder']);
     Route::post('/api/update-status', [OrderController::class, 'updateStatus']);
     Route::get('/api/order-detail/{id}', [OrderController::class, 'getOrderDetail']);
-    
+
     Route::get('/userpage', [UserPageController::class, 'index']);
-    
+
     Route::resource('employee', EmployeeController::class);
     Route::patch('/employee/{employee}/toggle-active', [EmployeeController::class, 'toggleActive']);
+
+    Route::prefix('statistic')->group(function () {
+        Route::get('/customer', [StatisticController::class, 'customer'])->name('statistic.customer');
+        Route::get('/inventory', [StatisticController::class, 'inventory'])->name('statistic.inventory');
+        Route::get('/sales', [StatisticController::class, 'sales'])->name('statistic.sales');
+    });
 });
 
 
