@@ -72,8 +72,8 @@
             <div class="card text-center shadow-sm">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title" style="color: 3069EB">Đơn mới</h5>
-                        <p class="card-text text-primary" style="font-size: 20px;">12</p>
+                        <h5 class="card-title" >Đơn mới</h5>
+                        <p class="card-text text-primary d-flex justify-content-start" style="font-size: 20px;">12</p>
                     </div>
                     <div class="">
                         <i class="fas fa-clock fa-2x mb-2" style="color: 3069EB"></i>
@@ -88,8 +88,8 @@
 
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title" style="color: CA8A03">Đang xử lý</h5>
-                        <p class="card-text" style="font-size: 20px; color: CA8A03">12</p>
+                        <h5 class="card-title" >Đang xử lý</h5>
+                        <p class="card-text d-flex justify-content-start" style="font-size: 20px; color: CA8A03">12</p>
                     </div>
                     <div class="">
                         <i class="fas fa-box-open fa-2x mb-2 " style="color: CA8A03"></i>
@@ -104,8 +104,8 @@
 
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title" style="color: 983EEA">Đang giao</h5>
-                        <p class="card-text" style="font-size: 20px; color: 983EEA">12</p>
+                        <h5 class="card-title" >Đang giao</h5>
+                        <p class="card-text d-flex justify-content-start" style="font-size: 20px; color: 983EEA">12</p>
                     </div>
                     <div class="">
                         <i class="fas fa-truck fa-2x mb-2 " style="color: 983EEA"></i>
@@ -120,8 +120,8 @@
 
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title" style="color: 1DA550">Hoàn thành</h5>
-                        <p class="card-text" style="font-size: 20px; color: 1DA550">12</p>
+                        <h5 class="card-title" >Hoàn thành</h5>
+                        <p class="card-text d-flex justify-content-start" style="font-size: 20px; color: 1DA550">12</p>
                     </div>
                     <div class="">
                         <i class="fas fa-check-circle fa-2x mb-2" style="color: 1DA550"></i>
@@ -190,24 +190,7 @@
 </div>
 
 
-<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Xác nhận hủy đơn hàng</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-      </div>
-      <div class="modal-body">
-        <p>Bạn có chắc chắn muốn hủy đơn hàng này không?</p>
-        <p>Mã đơn hàng: <strong id="cancel-order-id-text"></strong></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Từ chối</button>
-        <button type="button" class="btn btn-danger" id="confirm-cancel-order">Xác nhận</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 
 <!-- modal -->
@@ -223,6 +206,26 @@
             </div>
         </div>
     </div>
+</div>
+
+
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Xác nhận hủy đơn hàng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc chắn muốn hủy đơn hàng này không?</p>
+        <p>Mã đơn hàng: <strong id="cancel-order-id-text"></strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Từ chối</button>
+        <button type="button" class="btn btn-danger" id="confirm-cancel-order">Xác nhận</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -429,7 +432,7 @@
 
                     $('#orderDetailContent').html(`
                 <h5><strong>Chi tiết đơn hàng ${o.id}</strong></h5>
-                <div style="border: 2px solid #2196f3; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <div style="border: 2px solidrgb(223, 228, 232); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <h6><i class="bi bi-person-fill"></i> Thông tin khách hàng</h6>
                     <div class="row">
                         <div class="col-md-6">
