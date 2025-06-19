@@ -190,6 +190,26 @@
 </div>
 
 
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Xác nhận hủy đơn hàng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc chắn muốn hủy đơn hàng này không?</p>
+        <p>Mã đơn hàng: <strong id="cancel-order-id-text"></strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Từ chối</button>
+        <button type="button" class="btn btn-danger" id="confirm-cancel-order">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- modal -->
 
 <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
@@ -372,7 +392,6 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    alert(response.message);
                     $('#ordersTable').DataTable().ajax.reload(); // reload lại bảng
                 }
             });
@@ -473,7 +492,7 @@
     </button>` : ''}
 
   ${o.status === "Đơn mới" ? `
-    <button class="btn  btn-update-status"
+    <button class="btn  btn-show-cancel-modal"
             data-id="${o.id}" data-status="5"
             style = "background-color: #e74c3c ;color: ffffff"
             >
@@ -506,7 +525,6 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    alert(response.message);
                     $('#ordersTable').DataTable().ajax.reload();
                     $('#orderDetailModal').modal('hide');
                 },
@@ -515,6 +533,38 @@
                 }
             });
         });
+
+
+let cancelOrderId = null;
+
+$(document).on('click', '.btn-show-cancel-modal', function () {
+    cancelOrderId = $(this).data('id');
+    $('#order-id-text').text(cancelOrderId);
+    $('#cancelOrderModal').modal('show');
+});
+
+$('#confirm-cancel-order').on('click', function () {
+    if (!cancelOrderId) return;
+
+    $.ajax({
+        url: '/api/update-status',
+        method: 'POST',
+        data: {
+            order_id: cancelOrderId,
+            status: 5, // mã trạng thái "Đã hủy"
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            $('#ordersTable').DataTable().ajax.reload();
+            $('#orderDetailModal').modal('hide');
+            $('#cancelOrderModal').modal('hide');
+        },
+        error: function() {
+            alert('Lỗi khi cập nhật trạng thái!');
+        }
+    });
+});
+
 
 
     });
