@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('title', 'Báo cáo thống kê')
-
 @push('styles')
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -52,7 +51,6 @@
         .dropdown-toggle {
             background-color: #ffffff;
             border: 1px solid #ced4da;
-            border-radius: 6px;
             padding: 12px 20px;
             font-size: 0.95rem;
             font-weight: 500;
@@ -178,13 +176,47 @@
             background-color: #dc3545;
         }
 
-        .dropdown-toggle {
-            height: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .dropdown-card {
+            width: fit-content;
+            padding: 12px 16px;
+            align-self: flex-start;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            background-color: #ffffff;
         }
 
+        .dropdown-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            width: 180px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-toggle:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown-toggle i {
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-toggle.rotate-180 i {
+            transform: rotate(180deg);
+        }
     </style>
 @endpush
 
@@ -192,7 +224,7 @@
     <div style="background-color: #2C3E50; padding: 11px;" class="fixed-header">
         <h4 style="color: white; font-size: 20px">Báo cáo thống kê</h4>
     </div>
-    <div class="main-content" >
+    <div class="main-content">
         <div class="mb-4" style="display: flex; gap: 10px; align-items: center;">
             <input type="text" class="form-control" placeholder="Tìm kiếm theo mã, tên,..." style="flex: 1; padding: 10px 14px; border-radius: 6px; border: 1px solid #ccc;">
             <button class="btn" style="background-color: #3B82F6; color: white; padding: 10px 20px; border: none; border-radius: 6px;">
@@ -201,21 +233,20 @@
         </div>
         <section class="charts-section">
             <div class="chart-panel">
-                <h4>Top 3 mua hàng</h4>
+                <h4>Biểu đồ nhập vào - bán ra tháng 5/2025</h4>
                 <div class="chart-container">
                     <canvas id="revenueChart"></canvas>
                 </div>
             </div>
-            <div class="chart-panel">
-                <h4>Tỷ lệ khách Nam/Nữ</h4>
-                <div class="chart-container">
-                    <canvas id="sexualChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-panel">
-                <h4>Tỷ lệ mua lại</h4>
-                <div class="chart-container">
-                    <canvas id="repeatCustomerChart"></canvas>
+            <div class="card dropdown-card">
+                <div class="dropdown-container">
+                    <div id="dropdownToggle" class="dropdown-toggle">
+                        <span>Thời gian</span>
+                    </div>
+                    <ul id="dropdownMenu" class="dropdown-menu">
+                        <li><a href="{{ route('statistic.inventory.months') }}">Theo tháng</a></li>
+                        <li><a href="{{ route('statistic.inventory.years') }}">Theo năm</a></li>
+                    </ul>
                 </div>
             </div>
         </section>
@@ -231,24 +262,24 @@
                     <th>Phương thức thanh toán</th>
                     <th>Tổng tiền</th>
                 </tr>
-                <tr>
-                    <td>001</td>
-                    <td>10/05/2025</td>
-                    <td><span class="status-badge success">Đã lấy hàng</span></td>
-                    <td>KH001</td>
-                    <td>Chuyển khoản</td>
-                    <td>120,000 VNĐ</td>
-                </tr>
-                <tr>
-                    <td>001</td>
-                    <td>10/05/2025</td>
-                    <td><span class="status-badge success">Đã lấy hàng</span></td>
-                    <td>KH001</td>
-                    <td>Chuyển khoản</td>
-                    <td>120,000 VNĐ</td>
-                </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>10/05/2025</td>
+                    <td><span class="status-badge success">Đã lấy hàng</span></td>
+                    <td>KH001</td>
+                    <td>Chuyển khoản</td>
+                    <td>120,000 VNĐ</td>
+                </tr>
+                <tr>
+                    <td>001</td>
+                    <td>10/05/2025</td>
+                    <td><span class="status-badge success">Đã lấy hàng</span></td>
+                    <td>KH001</td>
+                    <td>Chuyển khoản</td>
+                    <td>120,000 VNĐ</td>
+                </tr>
                 <tr>
                     <td>001</td>
                     <td>10/05/2025</td>
@@ -289,52 +320,35 @@
         new Chart(document.getElementById('revenueChart'), {
             type: 'bar',
             data: {
-                labels: ['Hùng', 'Kiên', 'Trang'],
-                datasets: [{
-                    label: 'Số lần mua hàng',
-                    data: [25, 18, 12],
-                    backgroundColor: ['#74B72E','#3B82F6', '#85C1E9'],
-                    borderRadius: 5
-                }]
+                labels: ['Quần', 'Áo', 'Váy', 'Phụ Kiện'],
+                datasets: [
+                    {
+                        label: 'Nhập vào',
+                        data: [21, 18, 12, 11],
+                        backgroundColor: '#3B82F6',
+                        borderRadius: 5
+                    },
+                    {
+                        label: 'Bán ra',
+                        data: [19, 16, 9, 8.5],
+                        backgroundColor: '#74B72E',
+                        borderRadius: 5
+                    }
+                ]
             },
             options: {
-                indexAxis: 'y', // chuyển sang biểu đồ ngang
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: {
+                    y: {
                         beginAtZero: true
                     }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
                 }
-            }
-        });
-        new Chart(document.getElementById('sexualChart'), {
-            type: 'pie',
-            data: {
-                labels: ['Nam', 'Nữ'],
-                datasets: [{
-                    data: [45, 55],
-                    backgroundColor: ['#3B82F6', '#74B72E']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
-        new Chart(document.getElementById('repeatCustomerChart'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Khách mới', 'Khách quay lại'],
-                datasets: [{
-                    data: [40, 60],
-                    backgroundColor: ['#3B82F6', '#74B72E'],
-                    hoverOffset: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
             }
         });
 

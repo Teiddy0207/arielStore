@@ -4,14 +4,12 @@
     <div class="d-flex align-items-center">
         <img src="{{ asset('images/logoAeriel.png') }}" alt="Logo" style="height: 80px;">
     </div>
-
     <div class="d-flex align-items-center position-relative" id="userDropdownContainer">
         {{-- Avatar --}}
-        <div class="rounded-circle text-white d-flex justify-content-center align-items-center me-2" 
+        <div class="rounded-circle text-white d-flex justify-content-center align-items-center me-2"
              style="width: 40px; height: 40px; font-weight: bold; background-color: #2C3E50; font-size: 16px;">
             {{ strtoupper(substr(session('employee_name', 'U'), 0, 1)) }}
         </div>
-
         <div class="d-flex align-items-center" style="cursor: pointer;">
             <div>
                 <div class="fw-bold text-dark" style="font-size: 14px;">{{ session('employee_name', 'Unknown User') }}</div>
@@ -55,12 +53,12 @@
 
     <script>
         let dropdownTimeout;
-        
+
         function showDropdown() {
-            clearTimeout(dropdownTimeout);            
+            clearTimeout(dropdownTimeout);
             const dropdown = document.getElementById('userDropdown');
             const arrow = document.getElementById('dropdownArrow');
-            
+
             dropdown.style.display = 'block';
             if (arrow) {
                 arrow.style.transform = 'rotate(180deg)';
@@ -76,7 +74,7 @@
                 if (arrow) {
                     arrow.style.transform = 'rotate(0deg)';
                 }
-            }, 300); 
+            }, 300);
         }
         function keepDropdown() {
             clearTimeout(dropdownTimeout);
@@ -84,7 +82,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const container = document.getElementById('userDropdownContainer');
             const dropdown = document.getElementById('userDropdown');
-            
+
             if (container && dropdown) {
                 container.addEventListener('mouseenter', showDropdown);
                 container.addEventListener('mouseleave', hideDropdown);

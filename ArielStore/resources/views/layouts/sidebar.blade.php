@@ -19,7 +19,6 @@
         border-bottom: 1px solid #e9ecef;
         position: relative;
     }
-
     .nav-link,
     .report-toggle {
         display: flex;
@@ -130,8 +129,13 @@
                         Báo cáo bán hàng
                     </a>
                 </li>
-                <li><a href="#" class="nav-link-sub">Khách hàng</a></li>
-                <li><a href="#" class="nav-link-sub">Thống kê kho hàng</a></li>
+                <li><a href="{{ route('statistic.customer') }}" class="nav-link-sub {{ Route::is('statistic.customer') ? 'active' : '' }}">
+                        Khách hàng
+                    </a>
+                </li>
+                <li><a href="{{ route('statistic.inventory.months') }}" class="nav-link-sub {{ Route::is('statistic.inventory') ? 'active' : '' }}">
+                        Thống kê kho hàng</a>
+                </li>
             </ul>
         </li>
     </ul>

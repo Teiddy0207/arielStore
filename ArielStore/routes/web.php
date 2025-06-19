@@ -38,9 +38,14 @@ Route::middleware(['employee.auth'])->group(function () {
     Route::patch('/employee/{employee}/toggle-active', [EmployeeController::class, 'toggleActive']);
 
     Route::prefix('statistic')->group(function () {
-        Route::get('/customer', [StatisticController::class, 'customer'])->name('statistic.customer');
-        Route::get('/inventory', [StatisticController::class, 'inventory'])->name('statistic.inventory');
+        Route::get('statistic/customer', [StatisticController::class, 'customer'])->name('statistic.customer');
+        Route::get('statistic/inventory', [StatisticController::class, 'inventory'])->name('statistic.inventory');
         Route::get('/sales', [StatisticController::class, 'sales'])->name('statistic.sales');
+        Route::get('/sales/days', [StatisticController::class, 'showDaySales'])->name('statistic.sales.days');
+        Route::get('/sales/months', [StatisticController::class, 'showMonthSales'])->name('statistic.sales.months');
+        Route::get('/sales/years', [StatisticController::class, 'showYearSales'])->name('statistic.sales.years');
+        Route::get('/inventory/months', [StatisticController::class, 'showMonthInventory'])->name('statistic.inventory.months');
+        Route::get('/inventory/years', [StatisticController::class, 'showYearInventory'])->name('statistic.inventory.years');
     });
 });
 
