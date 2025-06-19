@@ -21,7 +21,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .card {
@@ -29,14 +29,6 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .card-icon {
-            font-size: 2.5rem;
-            opacity: 0.3;
         }
 
         .card h3 {
@@ -49,6 +41,65 @@
             margin: 0;
             font-size: 1.1rem;
             color: #6c757d;
+        }
+
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .dropdown-toggle {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #495057;
+            cursor: pointer;
+            width: 220px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-toggle:hover {
+            background-color: #e9ecef;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 999;
+            background-color: #ffffff;
+            border-radius: 6px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            margin-top: 5px;
+            padding: 10px 0;
+            list-style: none;
+            width: 100%;
+            display: none;
+        }
+
+        .dropdown-menu li a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            color: #495057;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: #f0f0f0;
+            color: #2c3e50;
+        }
+
+        .rotate-180 {
+            transform: rotate(180deg);
         }
 
         .charts-section {
@@ -73,9 +124,6 @@
         }
 
         .chart-container canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100% !important;
             height: 100% !important;
         }
@@ -121,39 +169,51 @@
         .status-badge.success { background-color: #28a745; }
         .status-badge.pending { background-color: #ffc107; }
         .status-badge.cancelled { background-color: #dc3545; }
+
+        .dropdown-toggle {
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
     </style>
 @endpush
 
 @section('content')
-    <div style="background-color: #2C3E50; padding: 11px;">
-        <h4 style="color: white; font-size: 20px">Quản lý đơn hàng</h4>
+    <div style="background-color: #2C3E50; padding: 11px;" class="fixed-header">
+        <h4 style="color: white; font-size: 20px">Báo cáo thống kê</h4>
     </div>
-
     <div class="main-content">
-        <!-- Summary Cards -->
-        <section class="summary-cards">
+        <section class="summary-cards" >
             <div class="card">
-                <div>
-                    <p>Số đơn hàng</p>
-                    <h3>124</h3>
-                </div>
+                <p>Số đơn hàng</p>
+                <h3>23,010</h3>
             </div>
             <div class="card">
-                <div>
-                    <p>Doanh thu (VNĐ)</p>
-                    <h3 style="color: #28a745;">25,120,000</h3>
-                </div>
+                <p>Doanh thu (VNĐ)</p>
+                <h3 style="color: #28a745;">18,125,120,000</h3>
             </div>
             <div class="card">
-                <div>
-                    <p>Số lượt khách</p>
-                    <h3>102</h3>
+                <p>Số lượt khách</p>
+                <h3>25,400</h3>
+            </div>
+            <div class="card" style="padding: 0">
+                <div class="dropdown-container" style="padding: 20px;">
+                    <div id="dropdownToggle" class="dropdown-toggle">
+                        <span>Thời gian</span>
+                    </div>
+                    <ul id="dropdownMenu" class="dropdown-menu">
+                        <li><a href="{{ route('statistic.sales.days') }}">Theo ngày</a></li>
+                        <li><a href="{{ route('statistic.sales.months') }}">Theo tháng</a></li>
+                        <li><a href="{{ route('statistic.sales.years') }}">Theo năm</a></li>
+                    </ul>
                 </div>
             </div>
         </section>
         <section class="charts-section">
             <div class="chart-panel">
-                <h4>Doanh thu 7 ngày gần nhất (triệu VNĐ)</h4>
+                <h4>Doanh thu 5 năm gần đây (tỷ VNĐ)</h4>
                 <div class="chart-container">
                     <canvas id="revenueChart"></canvas>
                 </div>
@@ -165,8 +225,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Table Section -->
         <section class="table-section">
             <h4>Đơn hàng gần đây</h4>
             <table>
@@ -190,6 +248,22 @@
                     <td>120,000 VNĐ</td>
                 </tr>
                 <tr>
+                    <td>001</td>
+                    <td>10/05/2025</td>
+                    <td><span class="status-badge success">Đã lấy hàng</span></td>
+                    <td>KH001</td>
+                    <td>Chuyển khoản</td>
+                    <td>120,000 VNĐ</td>
+                </tr>
+                <tr>
+                    <td>001</td>
+                    <td>10/05/2025</td>
+                    <td><span class="status-badge success">Đã lấy hàng</span></td>
+                    <td>KH001</td>
+                    <td>Chuyển khoản</td>
+                    <td>120,000 VNĐ</td>
+                </tr>
+                <tr>
                     <td>002</td>
                     <td>11/05/2025</td>
                     <td><span class="status-badge pending">Đang xử lý</span></td>
@@ -202,19 +276,30 @@
         </section>
     </div>
 @endsection
-
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Biểu đồ doanh thu 7 ngày
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        new Chart(revenueCtx, {
+        // Toggle dropdown
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggle = document.getElementById("dropdownToggle");
+            const menu = document.getElementById("dropdownMenu");
+            const icon = document.getElementById("dropdownIcon");
+
+            toggle.addEventListener("click", function () {
+                const isVisible = menu.style.display === "block";
+                menu.style.display = isVisible ? "none" : "block";
+                icon.classList.toggle("rotate-180", !isVisible);
+            });
+        });
+
+        // Chart Doanh thu
+        new Chart(document.getElementById('revenueChart'), {
             type: 'bar',
             data: {
-                labels: ['10/5', '11/5', '12/5', '13/5', '14/5', '15/5', '16/5'],
+                labels: ['2021', '2022', '2023', '2024', '2025'],
                 datasets: [{
-                    label: 'Doanh thu (triệu VNĐ)',
-                    data: [94, 38, 69, 42, 76, 48, 50],
+                    label: 'Doanh thu từng năm (tỷ VNĐ)',
+                    data: [9, 5, 7.6, 12.1, 13],
                     backgroundColor: '#1e3a8a',
                     borderRadius: 5
                 }]
@@ -230,15 +315,14 @@
             }
         });
 
-        // Biểu đồ tỷ lệ sản phẩm
-        const pieCtx = document.getElementById('productChart').getContext('2d');
-        new Chart(pieCtx, {
+        // Chart Pie sản phẩm
+        new Chart(document.getElementById('productChart'), {
             type: 'pie',
             data: {
-                labels: ['Sản phẩm 1', 'Sản phẩm 2', 'Sản phẩm 3', 'Sản phẩm 4', 'Sản phẩm 5'],
+                labels: ['Quần', 'Áo sơ mi', 'Mũ', 'Váy', 'Áo phông'],
                 datasets: [{
-                    data: [20, 25, 15, 25, 15],
-                    backgroundColor: ['#06b6d4', '#065f46', '#3b82f6', '#38bdf8', '#22c55e']
+                    data: [22, 28, 7, 23, 20],
+                    backgroundColor: ['#1E40AF', '#5579C6', '#22c55e', '#3B82F6', '#74B72E']
                 }]
             },
             options: {
