@@ -15,12 +15,9 @@
 </style>
 
 <body>
-
     @include('layouts.headerClient')
     @yield('content')
     @include('layouts.footerClient')
-
-
 </body>
 
 </html>

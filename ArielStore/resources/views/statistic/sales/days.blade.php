@@ -192,30 +192,44 @@
     <div style="background-color: #2C3E50; padding: 11px;" class="fixed-header">
         <h4 style="color: white; font-size: 20px">Báo cáo thống kê</h4>
     </div>
-    <div class="main-content" >
-        <div class="mb-4" style="display: flex; gap: 10px; align-items: center;">
-            <input type="text" class="form-control" placeholder="Tìm kiếm theo mã, tên,..." style="flex: 1; padding: 10px 14px; border-radius: 6px; border: 1px solid #ccc;">
-            <button class="btn" style="background-color: #3B82F6; color: white; padding: 10px 20px; border: none; border-radius: 6px;">
-                <i class="fas fa-search"></i> Tìm kiếm
-            </button>
-        </div>
+    <div class="main-content">
+        <section class="summary-cards">
+            <div class="card">
+                <p>Số đơn hàng</p>
+                <h3>124</h3>
+            </div>
+            <div class="card">
+                <p>Doanh thu (VNĐ)</p>
+                <h3 style="color: #28a745;">25,120,000</h3>
+            </div>
+            <div class="card">
+                <p>Số lượt khách</p>
+                <h3>102</h3>
+            </div>
+            <div class="card" style="padding: 0">
+                <div class="dropdown-container" style="padding: 20px;">
+                    <div id="dropdownToggle" class="dropdown-toggle">
+                        <span>Thời gian</span>
+                    </div>
+                    <ul id="dropdownMenu" class="dropdown-menu">
+                        <li><a href="{{ route('statistic.sales.days') }}">Theo ngày</a></li>
+                        <li><a href="{{ route('statistic.sales.months') }}">Theo tháng</a></li>
+                        <li><a href="{{ route('statistic.sales.years') }}">Theo năm</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
         <section class="charts-section">
             <div class="chart-panel">
-                <h4>Top 3 mua hàng</h4>
+                <h4>Doanh thu 7 ngày gần nhất (triệu VNĐ)</h4>
                 <div class="chart-container">
                     <canvas id="revenueChart"></canvas>
                 </div>
             </div>
             <div class="chart-panel">
-                <h4>Tỷ lệ khách Nam/Nữ</h4>
+                <h4>Tỷ lệ bán của sản phẩm</h4>
                 <div class="chart-container">
-                    <canvas id="sexualChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-panel">
-                <h4>Tỷ lệ mua lại</h4>
-                <div class="chart-container">
-                    <canvas id="repeatCustomerChart"></canvas>
+                    <canvas id="productChart"></canvas>
                 </div>
             </div>
         </section>
@@ -231,24 +245,32 @@
                     <th>Phương thức thanh toán</th>
                     <th>Tổng tiền</th>
                 </tr>
-                <tr>
-                    <td>001</td>
-                    <td>10/05/2025</td>
-                    <td><span class="status-badge success">Đã lấy hàng</span></td>
-                    <td>KH001</td>
-                    <td>Chuyển khoản</td>
-                    <td>120,000 VNĐ</td>
-                </tr>
-                <tr>
-                    <td>001</td>
-                    <td>10/05/2025</td>
-                    <td><span class="status-badge success">Đã lấy hàng</span></td>
-                    <td>KH001</td>
-                    <td>Chuyển khoản</td>
-                    <td>120,000 VNĐ</td>
-                </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>10/05/2025</td>
+                    <td><span class="status-badge success">Đã lấy hàng</span></td>
+                    <td>KH001</td>
+                    <td>Chuyển khoản</td>
+                    <td>120,000 VNĐ</td>
+                </tr>
+                <tr>
+                    <td>001</td>
+                    <td>10/05/2025</td>
+                    <td><span class="status-badge success">Đã lấy hàng</span></td>
+                    <td>KH002</td>
+                    <td>Chuyển khoản</td>
+                    <td>120,000 VNĐ</td>
+                </tr>
+                <tr>
+                    <td>001</td>
+                    <td>10/05/2025</td>
+                    <td><span class="status-badge success">Đã lấy hàng</span></td>
+                    <td>KH003</td>
+                    <td>Chuyển khoản</td>
+                    <td>120,000 VNĐ</td>
+                </tr>
                 <tr>
                     <td>001</td>
                     <td>10/05/2025</td>
@@ -270,6 +292,7 @@
         </section>
     </div>
 @endsection
+
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -286,35 +309,37 @@
             });
         });
 
+        // Chart Doanh thu
         new Chart(document.getElementById('revenueChart'), {
             type: 'bar',
             data: {
-                labels: ['Hùng', 'Kiên', 'Trang'],
+                labels: ['10/5', '11/5', '12/5', '13/5', '14/5', '15/5', '16/5'],
                 datasets: [{
-                    label: 'Số lần mua hàng',
-                    data: [25, 18, 12],
-                    backgroundColor: ['#74B72E','#3B82F6', '#85C1E9'],
+                    label: 'Doanh thu (triệu VNĐ)',
+                    data: [94, 38, 69, 42, 76, 48, 50],
+                    backgroundColor: '#1e3a8a',
                     borderRadius: 5
                 }]
             },
             options: {
-                indexAxis: 'y', // chuyển sang biểu đồ ngang
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: {
+                    y: {
                         beginAtZero: true
                     }
                 }
             }
         });
-        new Chart(document.getElementById('sexualChart'), {
+
+        // Chart Pie sản phẩm
+        new Chart(document.getElementById('productChart'), {
             type: 'pie',
             data: {
-                labels: ['Nam', 'Nữ'],
+                labels: ['Quần', 'Áo sơ mi', 'Mũ', 'Váy', 'Áo phông'],
                 datasets: [{
-                    data: [45, 55],
-                    backgroundColor: ['#3B82F6', '#74B72E']
+                    data: [20, 25, 15, 25, 15],
+                    backgroundColor: ['#1E40AF', '#5579C6', '#22c55e', '#3B82F6', '#74B72E']
                 }]
             },
             options: {
@@ -322,21 +347,5 @@
                 maintainAspectRatio: false
             }
         });
-        new Chart(document.getElementById('repeatCustomerChart'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Khách mới', 'Khách quay lại'],
-                datasets: [{
-                    data: [40, 60],
-                    backgroundColor: ['#3B82F6', '#74B72E'],
-                    hoverOffset: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
-
     </script>
 @endpush
