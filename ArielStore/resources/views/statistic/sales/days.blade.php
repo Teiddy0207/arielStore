@@ -184,6 +184,76 @@
             justify-content: space-between;
             align-items: center;
         }
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background-color: #eceef1;
+            border-radius: 10px;
+            width: 500px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal-header {
+            background-color: #2C3E50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .modal-header .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-body label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .modal-content-box {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-footer .btn-secondary {
+            padding: 8px 16px;
+            background-color: #ddd;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
 
     </style>
 @endpush
@@ -234,7 +304,12 @@
             </div>
         </section>
         <section class="table-section">
-            <h4>Đơn hàng gần đây</h4>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h4 style="margin: 0;">Đơn hàng gần đây</h4>
+                <button onclick="openReportModal()" class="btn" style="background-color: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 6px;">
+                    <i class="fas fa-file-export"></i> Xuất báo cáo
+                </button>
+            </div>
             <table>
                 <thead>
                 <tr>
@@ -291,11 +366,39 @@
             </table>
         </section>
     </div>
-@endsection
 
+    <div id="reportModal" style="display:none;" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div><i class="fas fa-box"></i> Xuất báo cáo</div>
+                <button onclick="closeReportModal()" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label for="reportContent">Nội dung</label>
+                <div class="modal-content-box">Nội dung file</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeReportModal()">Huỷ</button>
+                <button class="close-btn"
+                        style="background-color: #3B82F6;
+                        color: white; padding: 10px 20px;
+                        border: none; border-radius: 6px;"
+                        onclick="closeReportModal()">
+                    Xuất file
+                </button>
+            </div>
+        </div>
+@endsection
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        function openReportModal() {
+            document.getElementById('reportModal').style.display = 'flex';
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').style.display = 'none';
+        }
         // Toggle dropdown
         document.addEventListener("DOMContentLoaded", function () {
             const toggle = document.getElementById("dropdownToggle");
