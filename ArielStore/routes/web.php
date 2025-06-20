@@ -64,5 +64,13 @@ Route::get('/userpage/accessories', [UserPageController::class, 'showAccessories
 Route::get('/userpage/all', [UserPageController::class, 'showAll'])->name('userpage.all');
 Route::get('/userpage/sale', [UserPageController::class, 'showSale'])->name('userpage.sale');
 Route::get('/userpage/new', [UserPageController::class, 'showNew'])->name('userpage.new');
+Route::get('/userpage/product/{id}', [UserPageController::class, 'showProduct'])->name('userpage.product');
+Route::post('/userpage/product/{id}/add-to-cart', [UserPageController::class, 'addToCart'])->name('userpage.add-to-cart');
+Route::get('/userpage/cart', [UserPageController::class, 'viewCart'])->name('userpage.cart');
+Route::get('/userpage/checkout', [UserPageController::class, 'showcheckout'])->name('userpage.checkout');
+Route::post('/userpage/checkout', [UserPageController::class, 'checkout'])->name('userpage.checkout');
+Route::get('/userpage/order-success/{orderId}', [UserPageController::class, 'orderSuccess'])->name('userpage.order-success');
+Route::get('/userpage/search', [UserPageController::class, 'search'])->name('userpage.search');
+
 
 
