@@ -91,13 +91,13 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('products.show', $p->id) }}" class="btn btn-sm btn-primary">
+                        <a href="{{ route('products.show', $p->id) }}" class="btn btn-sm btn-primary ">
                             <i class="bi bi-eye"></i>
                         </a>
-                        <a href="{{ route('products.edit', $p->id) }}" class="btn btn-sm btn-warning">
+                        <a href="{{ route('products.edit', $p->id) }}" class="btn btn-sm btn-warning ms-3 me-3">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                        <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $p->id }}" data-name="{{ $p->name }}">
+                        <button class="btn btn-danger btn-sm delete-btn " data-id="{{ $p->id }}" data-name="{{ $p->name }}">
                             <i class="bi bi-trash"></i>
                         </button>
                     </td>
