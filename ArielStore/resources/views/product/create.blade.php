@@ -12,26 +12,26 @@
         @csrf
         <div class="card">
             <div class="card-header fw-bold"><h5>Thêm sản phẩm mới</h5></div>
-            
+
             <div class="card-body">
                 <div class="row">
                     {{-- Cột trái --}}
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label>Tên sản phẩm:</label>
-                            <input name="name" class="form-control" value="{{ old('name') }}" required>
+                            <input name="name" class="form-control" value="{{ old('name') }}" required placeholder="Nhập tên sản phẩm">
                             @error('name') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
 
                         <div class="row g-2 mb-3">
                             <div class="col">
                                 <label>Giá nhập:</label>
-                                <input name="import_price" type="number" class="form-control" value="{{ old('import_price', 0) }}" min="0">
+                                <input name="import_price" type="number" class="form-control" value="{{ old('import_price', 0) }}" min="0" placeholder="0">
                                 @error('import_price') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
                             <div class="col">
                                 <label>Giá bán:</label>
-                                <input name="price" type="number" class="form-control" value="{{ old('price', 0) }}" min="0" required>
+                                <input name="price" type="number" class="form-control" value="{{ old('price', 0) }}" min="0" required placeholder="0">
                                 @error('price') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
                         </div>
@@ -39,12 +39,12 @@
                         <div class="row g-2 mb-3">
                             <div class="col">
                                 <label>Chất liệu:</label>
-                                <input name="material" class="form-control" value="{{ old('material') }}">
+                                <input name="material" class="form-control" value="{{ old('material') }}" placeholder="Nhập chất liệu">
                                 @error('material') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
                             <div class="col">
                                 <label>Sale (%):</label>
-                                <input name="sale" type="number" min="0" max="100" class="form-control" value="{{ old('sale') }}">
+                                <input name="sale" type="number" min="0" max="100" class="form-control" value="{{ old('sale') }}" placeholder="Nhập mức Sale theo %">
                                 @error('sale') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                         <div class="row g-2 mb-3">
                             <div class="col">
                                 <label>Số lượng:</label>
-                                <input name="quantity" type="number" class="form-control" value="{{ old('quantity', 0) }}" min="0" required>
+                                <input name="quantity" type="number" class="form-control" value="{{ old('quantity', 0) }}" min="0" required placeholder="0">
                                 @error('quantity') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
                             <div class="col">
@@ -120,7 +120,7 @@
 
                         <div class="mb-3">
                             <label>Mô tả:</label>
-                            <textarea name="description" class="form-control" rows="5">{{ old('description') }}</textarea>
+                            <textarea name="description" class="form-control" rows="5" placeholder="Mô tả về sản phẩm">{{ old('description') }}</textarea>
                             @error('description') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
                     </div>
