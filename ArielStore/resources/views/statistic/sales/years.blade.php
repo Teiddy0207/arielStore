@@ -298,8 +298,12 @@
         <section class="table-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h4 style="margin: 0;">Đơn hàng gần đây</h4>
-                <button onclick="openReportModal()" class="btn" style="background-color: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 6px;">
-                    <i class="fas fa-file-export"></i> Xuất báo cáo
+                <button class="close-btn"
+                        style="background-color: #3B82F6;
+                color: white; padding: 10px 20px;
+                border: none; border-radius: 6px;"
+                        onclick="openReportModal()">
+                    Xuất file
                 </button>
             </div>
             <table>
@@ -404,7 +408,7 @@
                 datasets: [{
                     label: 'Doanh thu từng năm (tỷ VNĐ)',
                     data: [9, 5, 7.6, 12.1, 13],
-                    backgroundColor: '#1e3a8a',
+                    backgroundColor: '#3B82F6',
                     borderRadius: 5
                 }]
             },
