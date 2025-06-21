@@ -254,7 +254,33 @@
             border-radius: 6px;
             cursor: pointer;
         }
+        .modal-box {
+            background-color: #eceef1;
+            border-radius: 10px;
+            max-width: 90vw;
+            width: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
 
+        .modal-body {
+            padding: 20px;
+            overflow: auto;
+            max-height: 60vh;
+        }
+
+        .modal-content-box {
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            overflow-x: auto;
+        }
     </style>
 @endpush
 
@@ -292,8 +318,12 @@
         <section class="table-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h4 style="margin: 0;">Đơn hàng gần đây</h4>
-                <button onclick="openReportModal()" class="btn" style="background-color: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 6px;">
-                    <i class="fas fa-file-export"></i> Xuất báo cáo
+                <button class="close-btn"
+                        style="background-color: #3B82F6;
+                color: white; padding: 10px 20px;
+                border: none; border-radius: 6px;"
+                        onclick="openReportModal()">
+                    Xuất file
                 </button>
             </div>
             <table>
@@ -361,7 +391,7 @@
                         style="background-color: #3B82F6;
                         color: white; padding: 10px 20px;
                         border: none; border-radius: 6px;"
-                        onclick="closeReportModal()">
+                        onclick="exportTableToCSV()">
                     Xuất file
                 </button>
             </div>
@@ -371,14 +401,54 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Export table to CSV
+        function exportTableToCSV(filename = 'report.csv') {
+            const table = document.querySelector('.table-section table');
+            let csv = [];
+            for (let row of table.rows) {
+                let rowData = [];
+                for (let cell of row.cells) {
+                    let text = cell.innerText.replace(/\n/g, ' ').trim();
+                    text = '"' + text.replace(/"/g, '""') + '"';
+                    rowData.push(text);
+                }
+                csv.push(rowData.join(','));
+            }
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            // Close modal after export
+            closeReportModal();
+        }
+        function generatePreviewTableHTML() {
+            const table = document.querySelector('.table-section table');
+            let html = '<table style="width:100%;border-collapse:collapse;">';
+            for (let row of table.rows) {
+                html += '<tr>';
+                for (let cell of row.cells) {
+                    const tag = row.parentElement.tagName === 'THEAD' ? 'th' : 'td';
+                    html += `<${tag} style="border:1px solid #dee2e6;padding:8px;">${cell.innerText.replace(/\n/g, ' ').trim()}</${tag}>`;
+                }
+                html += '</tr>';
+            }
+            html += '</table>';
+            return html;
+        }
+
         function openReportModal() {
+            document.querySelector('.modal-content-box').innerHTML = generatePreviewTableHTML();
             document.getElementById('reportModal').style.display = 'flex';
         }
 
         function closeReportModal() {
             document.getElementById('reportModal').style.display = 'none';
         }
-
         // Toggle dropdown
         document.addEventListener("DOMContentLoaded", function () {
             const toggle = document.getElementById("dropdownToggle");
