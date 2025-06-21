@@ -73,7 +73,7 @@ Route::get('/userpage/product/{id}', [UserPageController::class, 'showProduct'])
 Route::post('/userpage/product/{id}/add-to-cart', [UserPageController::class, 'addToCart'])->name('userpage.add-to-cart');
 Route::get('/userpage/cart', [UserPageController::class, 'viewCart'])->name('userpage.cart');
 Route::get('/userpage/checkout', [UserPageController::class, 'showcheckout'])->name('userpage.checkout');
-Route::post('/userpage/checkout', [UserPageController::class, 'checkout'])->name('userpage.checkout');
+Route::post('/userpage/checkout', [UserPageController::class, 'checkout'])->name('userpage.checkoutpost');
 Route::get('/userpage/order-success/{orderId}', [UserPageController::class, 'orderSuccess'])->name('userpage.order-success');
 Route::get('/userpage/search', [UserPageController::class, 'search'])->name('userpage.search');
 

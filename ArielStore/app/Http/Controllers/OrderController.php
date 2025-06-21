@@ -14,7 +14,7 @@ class OrderController extends Controller
     public function getOrder(Request $request)
     {
         $status = $request->query('status');
-
+ $search = $request->query('search'); 
     $query = DB::table('orders')
         ->join('statuses', 'orders.status', '=', 'statuses.id')
         ->select(
@@ -28,6 +28,10 @@ class OrderController extends Controller
 
     if ($status) {
         $query->where('statuses.description', $status);
+    }
+
+     if ($search) {
+        $query->where('orders.id', 'like', "%$search%"); // 👈 tìm kiếm theo mã đơn hàng
     }
 
     return response()->json($query->get());

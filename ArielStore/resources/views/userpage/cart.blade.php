@@ -38,7 +38,7 @@
                     <span class="text-gray-600">Tổng cộng:</span>
                     <span class="text-xl font-bold">{{ number_format($total, 0, ',', '.') }}đ</span>
                 </div>
-                <a href="{{ route('userpage.checkout') }}" class="block text-center bg-black text-white font-bold py-3 rounded-lg hover:bg-gray-800">
+                <a href="{{ route('userpage.checkoutpost') }}" class="block text-center bg-black text-white font-bold py-3 rounded-lg hover:bg-gray-800">
                     Thanh toán giỏ hàng
                 </a>
             </div>

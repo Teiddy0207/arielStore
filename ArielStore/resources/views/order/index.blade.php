@@ -72,7 +72,7 @@
             <div class="card text-center shadow-sm">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title" >Đơn mới</h5>
+                        <h5 class="card-title">Đơn mới</h5>
                         <p class="card-text text-primary d-flex justify-content-start" style="font-size: 20px;">12</p>
                     </div>
                     <div class="">
@@ -88,7 +88,7 @@
 
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title" >Đang xử lý</h5>
+                        <h5 class="card-title">Đang xử lý</h5>
                         <p class="card-text d-flex justify-content-start" style="font-size: 20px; color: CA8A03">12</p>
                     </div>
                     <div class="">
@@ -104,7 +104,7 @@
 
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title" >Đang giao</h5>
+                        <h5 class="card-title">Đang giao</h5>
                         <p class="card-text d-flex justify-content-start" style="font-size: 20px; color: 983EEA">12</p>
                     </div>
                     <div class="">
@@ -120,7 +120,7 @@
 
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title" >Hoàn thành</h5>
+                        <h5 class="card-title">Hoàn thành</h5>
                         <p class="card-text d-flex justify-content-start" style="font-size: 20px; color: 1DA550">12</p>
                     </div>
                     <div class="">
@@ -142,28 +142,28 @@
             <span class="input-group-text bg-transparent border-0">
                 <i class="fas fa-search text-dark"></i>
             </span>
-            <input type="text" class="form-control border-0 bg-transparent" placeholder="Tìm kiếm theo mã đơn hàng">
+            <input type="text" class="form-control border-0 bg-transparent" placeholder="Tìm kiếm theo mã đơn hàng" id="orderSearchInput">
         </div>
     </div>
 
     <!-- Dropdown lọc trạng thái -->
-<div style="margin-right: 40px">
-    <div class="dropdown">
-        <button class="btn btn-light rounded-pill px-4 py-2 dropdown-toggle border-0" 
+    <div style="margin-right: 40px">
+        <div class="dropdown">
+            <button class="btn btn-light rounded-pill px-4 py-2 dropdown-toggle border-0"
                 type="button" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownStatus">
-            <i class="fas fa-filter me-1"></i> 
-            <span class="dropdown-label">Tất cả trạng thái</span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item filter-option" data-status="">Tất cả trạng thái</a></li>
-            <li><a class="dropdown-item filter-option" data-status="Đơn mới">Đơn mới</a></li>
-            <li><a class="dropdown-item filter-option" data-status="Đang xử lý">Đang xử lý</a></li>
-            <li><a class="dropdown-item filter-option" data-status="Đang giao">Đang giao</a></li>
-            <li><a class="dropdown-item filter-option" data-status="Hoàn thành">Hoàn thành</a></li>
-            <li><a class="dropdown-item filter-option" data-status="Đã hủy">Đã hủy</a></li>
-        </ul>
+                <i class="fas fa-filter me-1"></i>
+                <span class="dropdown-label">Tất cả trạng thái</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item filter-option" data-status="">Tất cả trạng thái</a></li>
+                <li><a class="dropdown-item filter-option" data-status="Đơn mới">Đơn mới</a></li>
+                <li><a class="dropdown-item filter-option" data-status="Đang xử lý">Đang xử lý</a></li>
+                <li><a class="dropdown-item filter-option" data-status="Đang giao">Đang giao</a></li>
+                <li><a class="dropdown-item filter-option" data-status="Hoàn thành">Hoàn thành</a></li>
+                <li><a class="dropdown-item filter-option" data-status="Đã hủy">Đã hủy</a></li>
+            </ul>
+        </div>
     </div>
-</div>
 
 </div>
 
@@ -210,22 +210,22 @@
 
 
 <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Xác nhận hủy đơn hàng</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-      </div>
-      <div class="modal-body">
-        <p>Bạn có chắc chắn muốn hủy đơn hàng này không?</p>
-        <p>Mã đơn hàng: <strong id="cancel-order-id-text"></strong></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Từ chối</button>
-        <button type="button" class="btn btn-danger" id="confirm-cancel-order">Xác nhận</button>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận hủy đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn hủy đơn hàng này không?</p>
+                <p>Mã đơn hàng: <strong id="cancel-order-id-text"></strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Từ chối</button>
+                <button type="button" class="btn btn-danger" id="confirm-cancel-order">Xác nhận</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 
@@ -246,6 +246,9 @@
             searching: false,
             ajax: {
                 url: '/api/get-orders',
+                data: function(d) {
+                    d.search = $('#orderSearchInput').val();
+                },
                 dataSrc: '' // API trả về mảng JSON
             },
             columns: [{
@@ -365,20 +368,24 @@
             ]
         });
 
+        $('#orderSearchInput').on('input', function() {
+        
+            table.ajax.reload();
+        });
 
-   $('.filter-option').on('click', function(e) {
-    e.preventDefault();
+        $('.filter-option').on('click', function(e) {
+            e.preventDefault();
 
-    const status = $(this).data('status');
-    const text = $(this).text().trim();
+            const status = $(this).data('status');
+            const text = $(this).text().trim();
 
-    // ✅ Cập nhật chỉ phần label để giữ icon và class
-    $('#dropdownStatus .dropdown-label').text(text);
+            // ✅ Cập nhật chỉ phần label để giữ icon và class
+            $('#dropdownStatus .dropdown-label').text(text);
 
-    // ✅ Gửi lại request để reload bảng với filter mới
-    const url = '/api/get-orders' + (status ? `?status=${encodeURIComponent(status)}` : '');
-    table.ajax.url(url).load();
-});
+            // ✅ Gửi lại request để reload bảng với filter mới
+            const url = '/api/get-orders' + (status ? `?status=${encodeURIComponent(status)}` : '');
+            table.ajax.url(url).load();
+        });
 
 
         $(document).on('click', '.btn-action', function() {
@@ -538,35 +545,35 @@
         });
 
 
-let cancelOrderId = null;
+        let cancelOrderId = null;
 
-$(document).on('click', '.btn-show-cancel-modal', function () {
-    cancelOrderId = $(this).data('id');
-    $('#order-id-text').text(cancelOrderId);
-    $('#cancelOrderModal').modal('show');
-});
+        $(document).on('click', '.btn-show-cancel-modal', function() {
+            cancelOrderId = $(this).data('id');
+            $('#order-id-text').text(cancelOrderId);
+            $('#cancelOrderModal').modal('show');
+        });
 
-$('#confirm-cancel-order').on('click', function () {
-    if (!cancelOrderId) return;
+        $('#confirm-cancel-order').on('click', function() {
+            if (!cancelOrderId) return;
 
-    $.ajax({
-        url: '/api/update-status',
-        method: 'POST',
-        data: {
-            order_id: cancelOrderId,
-            status: 5, // mã trạng thái "Đã hủy"
-            _token: '{{ csrf_token() }}'
-        },
-        success: function(response) {
-            $('#ordersTable').DataTable().ajax.reload();
-            $('#orderDetailModal').modal('hide');
-            $('#cancelOrderModal').modal('hide');
-        },
-        error: function() {
-            alert('Lỗi khi cập nhật trạng thái!');
-        }
-    });
-});
+            $.ajax({
+                url: '/api/update-status',
+                method: 'POST',
+                data: {
+                    order_id: cancelOrderId,
+                    status: 5, // mã trạng thái "Đã hủy"
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $('#ordersTable').DataTable().ajax.reload();
+                    $('#orderDetailModal').modal('hide');
+                    $('#cancelOrderModal').modal('hide');
+                },
+                error: function() {
+                    alert('Lỗi khi cập nhật trạng thái!');
+                }
+            });
+        });
 
 
 
