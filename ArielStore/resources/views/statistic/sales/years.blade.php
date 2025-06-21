@@ -10,7 +10,6 @@
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
         }
-
         .main-content {
             flex-grow: 1;
             padding: 30px;
