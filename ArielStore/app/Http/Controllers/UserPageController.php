@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\ShowProduct;
+use App\Models\Product;
 
 use Illuminate\Http\Request;
 
@@ -14,22 +15,38 @@ class UserPageController extends Controller
 
     public function showShirt()
     {
-        return view ('userpage.shirt');
+        $products = Product::with('images', 'productType')
+            ->where('product_type_id', 1)
+            ->where('status', 'Đang bán')
+            ->get();
+        return view('userpage.shirt', compact('products'));
     }
 
     public function showPant()
     {
-        return view('userpage.pant');
+        $products = Product::with('images', 'productType')
+            ->where('product_type_id', 2)
+            ->where('status', 'Đang bán')
+            ->get();
+        return view('userpage.pant', compact('products'));
     }
 
     public function showSkirt() 
     {
-        return view('userpage.skirt');
+         $products = Product::with('images', 'productType')
+            ->where('product_type_id', 3)
+            ->where('status', 'Đang bán')
+            ->get();
+        return view('userpage.skirt', compact('products'));
     }
 
     public function showAccessories() 
     {
-        return view('userpage.accessories');
+          $products = Product::with('images', 'productType')
+            ->where('product_type_id', 4)
+            ->where('status', 'Đang bán')
+            ->get();
+        return view('userpage.accessories', compact('products'));
     }
 
     public function showAll() 
@@ -49,7 +66,7 @@ class UserPageController extends Controller
 
     public function showProduct($id)
     {
-        $product = ShowProduct::find($id);
+        $product = Product::with('images', 'productType')->find($id);
         if (!$product) {
             abort(404);
         }
@@ -60,7 +77,7 @@ class UserPageController extends Controller
     public function addToCart(Request $request, $id)
 {
     // Tìm sản phẩm theo ID
-    $product = ShowProduct::find($id);
+    $product = Product::find($id);
     if (!$product) {
         return redirect()->back()->with('error', 'Sản phẩm không tồn tại.');
     }
@@ -79,8 +96,8 @@ class UserPageController extends Controller
         $cart[$id] = [
             'name' => $product->name,
             'price' => $product->price,
-            'original_price' => $product->original_price,
-            'image' => $product->image,
+            'original_price' => $product->import_price,
+            'image' => $product->images->isNotEmpty() ? asset('storage/' . $product->images->first()->filename) : asset('images/d&g.jpg'),
             'quantity' => $quantity, // Số lượng mặc định là 1
         ];
     }

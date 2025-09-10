@@ -23,7 +23,6 @@ class ProductController extends Controller
             });
         }
 
-        // Lọc theo trạng thái
         if (request('status')) {
             $query->where('status', request('status'));
         }
