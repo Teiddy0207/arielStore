@@ -59,11 +59,7 @@ class UserPageController extends Controller
 
     public function showSale() 
     {
-           $products = Product::with('images', 'productType')
-            ->where('status', 'Đang bán')
-            ->where('sale', '>', 0)
-            ->get();
-        return view('userpage.sale' , compact('products'));
+        return view('userpage.sale');
     }
 
     public function showNew() 
@@ -138,14 +134,8 @@ public function showcheckout()
     $total = array_reduce($cart, function ($sum, $item) {
         return $sum + $item['price'] * $item['quantity'];
     }, 0);
-    // Tạo mã đơn hàng ngẫu nhiên (ví dụ)
-    $orderId = rand(1000000000, 9999999999);
 
-    // Xóa giỏ hàng khỏi session
-    session()->forget('cart');
-
-    // Chuyển hướng đến trang "Đặt hàng thành công"
-   
+    // Không xóa giỏ hàng ở đây; chỉ hiển thị trang thanh toán
     return view('userpage.checkout', compact('cart', 'total'));
 
 }
@@ -160,7 +150,7 @@ public function checkout(Request $request)
         return redirect()->route('userpage.cart')->with('error', 'Giỏ hàng của bạn đang trống.');
     }
 
-    // Xử lý logic lưu thông tin đơn hàng
+    // Xử lý logic lưu thông tin đơn hàng (giả lập/todo)
     $total = array_reduce($cart, function ($sum, $item) {
         return $sum + $item['price'] * $item['quantity'];
     }, 0);
@@ -168,7 +158,7 @@ public function checkout(Request $request)
     // Tạo mã đơn hàng ngẫu nhiên (giả lập)
     $orderId = rand(1000000000, 9999999999);
 
-    // Sau khi xử lý, xóa giỏ hàng khỏi session
+    // Sau khi xử lý thành công, xóa giỏ hàng khỏi session
     session()->forget('cart');
 
     // Chuyển hướng đến trang "Đặt hàng thành công"
