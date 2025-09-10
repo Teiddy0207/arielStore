@@ -78,6 +78,5 @@ Route::get('/userpage/search', [UserPageController::class, 'search'])->name('use
 
 // API thống kê (public or adjust middleware as needed)
 Route::get('/api/statistic/sales/days', [StatisticController::class, 'statisticSaleDay']);
-
-
-
+Route::get('/api/statistic/sales/days/chart', [StatisticController::class, 'statisticSaleDayChart']);
+Route::get('/api/statistic/sales/months', [StatisticController::class, 'statisticSaleMonth']);

@@ -164,10 +164,12 @@ public function checkout(Request $request)
         ]);
 
         foreach ($cart as $productId => $item) {
+            $p = Product::find($productId);
             OrderDetail::create([
                 'order_id' => $order->id,
                 'product_name' => $item['name'],
                 'price' => $item['price'],
+                'product_type_id' => $p?->product_type_id,
             ]);
         }
 

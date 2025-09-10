@@ -410,19 +410,31 @@
             });
         });
 
-        new Chart(document.getElementById('productChart'), {
-            type: 'pie',
-            data: {
-                labels: ['Quần', 'Áo sơ mi', 'Mũ', 'Váy', 'Áo phông'],
-                datasets: [{
-                    data: [20, 25, 15, 25, 15],
-                    backgroundColor: ['#1E40AF', '#5579C6', '#22c55e', '#3B82F6', '#74B72E']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
+        $.getJSON('/api/statistic/sales/days/chart', function(resp) {
+            // Backend có thể trả mảng [{type_name, percent}, ...] hoặc {labels:[], data:[]}
+            var labels, data;
+            if (Array.isArray(resp)) {
+                labels = resp.map(function(x){ return x.type_name; });
+                data = resp.map(function(x){ return Number(x.percent) || 0; });
+            } else {
+                labels = resp.labels || [];
+                data = (resp.data || []).map(function(v){ return Number(v) || 0; });
             }
+
+            new Chart(document.getElementById('productChart'), {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: ['#1E40AF', '#5579C6', '#22c55e', '#3B82F6', '#74B72E']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
         });
     </script>
 

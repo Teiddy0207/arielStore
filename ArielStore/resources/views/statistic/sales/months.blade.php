@@ -404,28 +404,41 @@
             });
         });
 
-        // Chart Doanh thu
-        new Chart(document.getElementById('revenueChart'), {
-            type: 'bar',
-            data: {
-                labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-                datasets: [{
-                    label: 'Doanh thu từng tháng (triệu VNĐ)',
-                    data: [940, 380, 690, 1010, 800, 480, 1125, 790, 630, 770, 900, 840],
-                    backgroundColor: '#1e3a8a',
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
+        // Chart Doanh thu (theo tháng) từ API
+        fetch('/api/statistic/sales/months')
+            .then(function(r){ return r.json(); })
+            .then(function(rows){
+                // rows: [{ month: 'YYYY-MM', total_sales: number }, ...]
+                var labels = (rows || []).map(function(x){
+                    var mm = (x.month || '').split('-')[1] || '';
+                    return mm.replace(/^0/, '');
+                });
+                var data = (rows || []).map(function(x){
+                    return (Number(x.total_sales) || 0) / 1000000; // triệu VNĐ
+                });
+
+                new Chart(document.getElementById('revenueChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Doanh thu từng tháng (triệu VNĐ)',
+                            data: data,
+                            backgroundColor: '#1e3a8a',
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
+            });
 
         // Chart Pie sản phẩm
         new Chart(document.getElementById('productChart'), {
