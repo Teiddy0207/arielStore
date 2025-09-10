@@ -9,48 +9,52 @@
         <div class="space-y-4">
             <!-- Main Product Image -->
             <img 
-                src="{{ asset('images/' . $product->image) }}" 
+                src="{{ $product->images->isNotEmpty() ? asset('storage/' . $product->images->first()->filename) : asset('images/d&g.jpg') }}" 
                 alt="{{ $product->name }}" 
                 class="w-full h-auto object-cover rounded-lg shadow-md">
             
             <!-- Additional Images -->
+            @if($product->images->count() > 1)
             <div class="grid grid-cols-4 gap-2">
-                @foreach (json_decode($product->additional_images ?? '[]') as $image)
+                @foreach ($product->images->slice(1) as $img)
                     <img 
-                        src="{{ asset('images/' . $image) }}" 
+                        src="{{ asset('storage/' . $img->filename) }}" 
                         alt="Additional Image" 
                         class="w-full h-auto object-cover rounded-lg shadow">
                 @endforeach
             </div>
+            @endif
         </div>
 
         <!-- Product Details -->
         <div>
-            <h1 class="text-3xl font-bold mb-4">{{ $product->name }}</h1>
+            <h1 class="text-3xl font-bold mb-2">{{ $product->name }}</h1>
+            <p class="text-sm text-gray-600 mb-4">Loại: {{ optional($product->productType)->description ?? 'N/A' }}</p>
 
             <!-- Pricing -->
             <div class="text-2xl font-semibold text-black mb-4">
                 {{ number_format($product->price, 0, ',', '.') }}đ
-                @if ($product->original_price)
+                @if ($product->sale && $product->import_price)
                     <span class="text-gray-500 line-through text-xl ml-2">
-                        {{ number_format($product->original_price, 0, ',', '.') }}đ
+                        {{ number_format($product->import_price, 0, ',', '.') }}đ
                     </span>
                 @endif
             </div>
 
-            <!-- Size Selection -->
+            <!-- Material -->
+            @if($product->material)
             <div class="mb-4">
-                <label class="block text-lg font-medium mb-2">Size:</label>
-                <div class="flex space-x-2">
-                    @foreach (json_decode($product->sizes) as $size)
-                        <button 
-                            data-size="{{ $size }}" 
-                            class="size-selector px-4 py-2 border rounded hover:bg-gray-200 transition duration-150">
-                            {{ $size }}
-                        </button>
-                    @endforeach
-                </div>
+                <span class="font-medium">Chất liệu:</span> {{ $product->material }}
             </div>
+            @endif
+
+            <!-- Size (hiển thị kích thước hiện có) -->
+            @if($product->size)
+            <div class="mb-4">
+                <label class="block text-lg font-medium mb-2">Kích thước:</label>
+                <span class="inline-block px-4 py-2 border rounded">{{ $product->size }}</span>
+            </div>
+            @endif
 
             <!-- Quantity Selector -->
             <div class="mb-4">
@@ -70,7 +74,7 @@
             <!-- Add to Cart Button -->
             <form action="{{ route('userpage.add-to-cart', $product->id) }}" method="POST">
     @csrf
-    <input type="hidden" name="quantity" value="1">
+    <input type="hidden" name="quantity" id="quantity-input" value="1">
     <button type="submit" class="mt-4 w-full px-6 py-3 bg-black text-white font-bold rounded-lg hover:bg-gray-700">
         Thêm vào giỏ hàng
     </button>
@@ -93,26 +97,24 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const sizeButtons = document.querySelectorAll('.size-selector');
-        sizeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons
-                sizeButtons.forEach(btn => btn.classList.remove('bg-black', 'text-white'));
-                // Add active class to the clicked button
-                button.classList.add('bg-black', 'text-white');
-            });
-        });
-
         const quantityInput = document.getElementById('quantity');
-        document.getElementById('decrement').addEventListener('click', () => {
+        const hiddenQuantity = document.getElementById('quantity-input');
+        document.getElementById('decrement').addEventListener('click', (e) => {
+            e.preventDefault();
             const currentValue = parseInt(quantityInput.value);
             if (currentValue > 1) {
                 quantityInput.value = currentValue - 1;
+                hiddenQuantity.value = quantityInput.value;
             }
         });
-        document.getElementById('increment').addEventListener('click', () => {
+        document.getElementById('increment').addEventListener('click', (e) => {
+            e.preventDefault();
             const currentValue = parseInt(quantityInput.value);
             quantityInput.value = currentValue + 1;
+            hiddenQuantity.value = quantityInput.value;
+        });
+        quantityInput.addEventListener('change', () => {
+            hiddenQuantity.value = quantityInput.value;
         });
     });
 </script>
