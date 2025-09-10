@@ -413,9 +413,7 @@
                 method: 'GET',
                 success: function(data) {
                     const o = data.order;
-                    const d = data.detail ?? {};
-
-
+                    const details = data.details || [];
 
                     const statusClass = (() => {
                         switch (o.status) {
@@ -433,6 +431,14 @@
                                 return "bg-secondary";
                         }
                     })();
+
+                    const rowsHtml = details.map(d => `
+                        <tr>
+                            <td>${d.product_name}</td>
+                            <td>1</td>
+                             <td>${Number(o.total_amount).toLocaleString()} VND</td>
+                        </tr>
+                    `).join('');
 
                     $('#orderDetailContent').html(`
                 <h5><strong>Chi tiết đơn hàng ${o.id}</strong></h5>
@@ -459,20 +465,11 @@
                             <tr>
                                 <th>Sản phẩm</th>
                                 <th>Số lượng</th>
-                                // <th>Đơn giá</th>
                                 <th>Thành tiền</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>${d.product_name}</td>
-                              
-                              
-                                <td>${d?.quantity ?? 1}</td>
-                              
-                                // <td>${Number(d.price).toLocaleString()} VND</td>
-                                <td>${Number(o.total_amount).toLocaleString()} VND</td>
-                            </tr>
+                            ${rowsHtml || '<tr><td colspan="3" class="text-center">Không có sản phẩm</td></tr>'}
                         </tbody>
                     </table>
                     
