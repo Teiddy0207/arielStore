@@ -310,59 +310,18 @@
                     <i class="fas fa-file-export"></i> Xuất báo cáo
                 </button>
             </div>
-            <table>
+            <table id="ordersTable" class="display table table-bordered"> 
                 <thead>
                 <tr>
                     <th>Mã đơn</th>
                     <th>Ngày đặt</th>
                     <th>Trạng thái</th>
-                    <th>Mã khách hàng</th>
-                    <th>Phương thức thanh toán</th>
+                    <!-- <th>Mã khách hàng</th> -->
+                    <!-- <th>Phương thức thanh toán</th> -->
                     <th>Tổng tiền</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>001</td>
-                    <td>10/05/2025</td>
-                    <td><span class="status-badge success">Đã lấy hàng</span></td>
-                    <td>KH001</td>
-                    <td>Chuyển khoản</td>
-                    <td>120,000 VNĐ</td>
-                </tr>
-                <tr>
-                    <td>001</td>
-                    <td>10/05/2025</td>
-                    <td><span class="status-badge success">Đã lấy hàng</span></td>
-                    <td>KH002</td>
-                    <td>Chuyển khoản</td>
-                    <td>120,000 VNĐ</td>
-                </tr>
-                <tr>
-                    <td>001</td>
-                    <td>10/05/2025</td>
-                    <td><span class="status-badge success">Đã lấy hàng</span></td>
-                    <td>KH003</td>
-                    <td>Chuyển khoản</td>
-                    <td>120,000 VNĐ</td>
-                </tr>
-                <tr>
-                    <td>001</td>
-                    <td>10/05/2025</td>
-                    <td><span class="status-badge success">Đã lấy hàng</span></td>
-                    <td>KH001</td>
-                    <td>Chuyển khoản</td>
-                    <td>120,000 VNĐ</td>
-                </tr>
-                <tr>
-                    <td>002</td>
-                    <td>11/05/2025</td>
-                    <td><span class="status-badge pending">Đang xử lý</span></td>
-                    <td>KH002</td>
-                    <td>Tiền mặt</td>
-                    <td>150,000 VNĐ</td>
-                </tr>
-                </tbody>
+
             </table>
         </section>
     </div>
@@ -391,7 +350,12 @@
 @endsection
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
+
+
         function openReportModal() {
             document.getElementById('reportModal').style.display = 'flex';
         }
@@ -412,30 +376,40 @@
             });
         });
 
-        // Chart Doanh thu
-        new Chart(document.getElementById('revenueChart'), {
-            type: 'bar',
-            data: {
-                labels: ['10/5', '11/5', '12/5', '13/5', '14/5', '15/5', '16/5'],
-                datasets: [{
-                    label: 'Doanh thu (triệu VNĐ)',
-                    data: [94, 38, 69, 42, 76, 48, 50],
-                    backgroundColor: '#1e3a8a',
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
+        $.getJSON('/api/statistic/sales/days', function(rows) {
+            const labels = (rows || []).map(function(r) {
+                const d = new Date(r.date);
+                const dd = String(d.getDate()).padStart(2, '0');
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                return dd + '/' + mm;
+            });
+            const data = (rows || []).map(function(r) {
+                return (Number(r.total_sales) || 0) / 1000000; // triệu VNĐ
+            });
+
+            new Chart(document.getElementById('revenueChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu (triệu VNĐ)',
+                        data: data,
+                        backgroundColor: '#1e3a8a',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
+            });
         });
 
-        // Chart Pie sản phẩm
         new Chart(document.getElementById('productChart'), {
             type: 'pie',
             data: {
@@ -450,5 +424,29 @@
                 maintainAspectRatio: false
             }
         });
+    </script>
+
+    <script>
+        
+          $(document).ready(function() {
+        let table = $('#ordersTable').DataTable({
+            searching: false,
+            ajax: {
+                url: '/api/get-orders',
+                data: function(d) {
+                    d.search = $('#orderSearchInput').val();
+                },
+                dataSrc: '' 
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'created_at' },
+                {data: 'status'  },
+                { data: 'total_amount' }
+            ]
+        });
+
+    });
+
     </script>
 @endpush

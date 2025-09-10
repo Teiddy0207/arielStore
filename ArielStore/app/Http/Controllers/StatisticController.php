@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Psr7\Query;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class StatisticController extends Controller
 {
     public function index(){
@@ -37,5 +38,17 @@ class StatisticController extends Controller
     public function showYearInventory()
     {
         return view('statistic.inventory.years');
+    }
+
+    public function statisticSaleDay()
+    {
+        $Query = DB::table('orders')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total_amount) as total_sales'))
+            ->where('status', 4) // Giả sử trạng thái 4 là "Hoàn thành"
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return response()->json($Query);
     }
 }

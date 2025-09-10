@@ -8,7 +8,6 @@ use  App\Http\Controllers\UserPageController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AuthController;
 
-
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 Route::get('/api/get-orders', [OrderController::class, 'getOrder']);
@@ -24,7 +23,6 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Protected routes (cần đăng nhập)
 Route::middleware(['employee.auth'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -51,6 +49,7 @@ Route::middleware(['employee.auth'])->group(function () {
 
 
 use App\Http\Controllers\ProductController;
+
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
@@ -76,6 +75,9 @@ Route::get('/userpage/checkout', [UserPageController::class, 'showcheckout'])->n
 Route::post('/userpage/checkout', [UserPageController::class, 'checkout'])->name('userpage.checkoutpost');
 Route::get('/userpage/order-success/{orderId}', [UserPageController::class, 'orderSuccess'])->name('userpage.order-success');
 Route::get('/userpage/search', [UserPageController::class, 'search'])->name('userpage.search');
+
+// API thống kê (public or adjust middleware as needed)
+Route::get('/api/statistic/sales/days', [StatisticController::class, 'statisticSaleDay']);
 
 
 
