@@ -76,7 +76,7 @@
                 <tr>
                     <td>{{ $p->id }}</td>
                     <td>{{ $p->name }}</td>
-                    <td>{{ $p->category }}</td>
+                    <td>{{ $p->productType ? $p->productType->description : 'N/A' }}</td>
                     <td>{{ number_format($p->price, 0, ',', '.') }}</td>
                     <td>{{ $p->quantity }}</td>
                     <td>{{ $p->size }}</td>
