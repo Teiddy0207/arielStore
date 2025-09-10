@@ -177,7 +177,6 @@
             <tr>
                 <th>Mã đơn hàng</th>
                 <th>Khách hàng</th>
-                <th>Sản phẩm</th>
                 <th>Tổng tiền</th>
                 <th>Trạng thái</th>
                 <th>Ngày tạo</th>
@@ -257,9 +256,7 @@
                 {
                     data: 'customer_name'
                 },
-                {
-                    data: 'product_name'
-                },
+
                 {
                     data: 'total_amount'
                 },

@@ -17,11 +17,9 @@ class OrderController extends Controller
      $search = $request->query('search'); 
      $query = DB::table('orders')
         ->join('statuses', 'orders.status', '=', 'statuses.id')
-        ->join('order_details', 'orders.id', '=', 'order_details.order_id')
         ->select(
             'orders.id',
             'orders.customer_name',
-            'order_details.product_name',
             'orders.total_amount',
             'statuses.description as status',
             'orders.created_at'
@@ -59,14 +57,15 @@ public function getOrderDetail($id)
 {
     $order = DB::table('orders')
         ->join('statuses', 'orders.status', '=', 'statuses.id')
-                ->join('order_details', 'orders.id', '=', 'order_details.order_id')
 
         ->where('orders.id', $id)
         ->select(
             'orders.id',
             'orders.customer_name',
-            'order_details.product_name',
             'orders.total_amount',
+            'orders.address',
+            'orders.note',
+            'orders.phone',
             'statuses.description as status',
             'orders.created_at'
         )
@@ -74,13 +73,8 @@ public function getOrderDetail($id)
 
     $orderDetail = DB::table('order_details')
         ->select(
-            'order_details.note',
-            'order_details.phone',
-            'order_details.quantity',
-                        'order_details.address',
-                        'order_details.email',
-                        'order_details.price',
-
+            'order_details.product_name'
+                    
         )
         ->first();
 

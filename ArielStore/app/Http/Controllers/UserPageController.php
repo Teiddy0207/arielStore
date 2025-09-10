@@ -145,6 +145,7 @@ public function checkout(Request $request)
         'email' => 'required|email',
         'address' => 'required|string',
         'payment_method' => 'required|string',
+        'note' => 'nullable|string'
     ]);
 
     $total = array_reduce($cart, function ($sum, $item) {
@@ -154,16 +155,18 @@ public function checkout(Request $request)
     $orderId = DB::transaction(function () use ($validated, $cart, $total) {
         $order = Order::create([
             'customer_name' => $validated['name'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'],
+            'address' => $validated['address'],
+            'note' => $validated['note'] ?? null,
             'total_amount' => $total,
-            'status' => 1, // ví dụ: 1 = Mới tạo
+            'status' => 1,
         ]);
 
         foreach ($cart as $productId => $item) {
             OrderDetail::create([
                 'order_id' => $order->id,
                 'product_name' => $item['name'],
-                'phone' => $validated['phone'],
-                'quantity' => $item['quantity'],
             ]);
         }
 
