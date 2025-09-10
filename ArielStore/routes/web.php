@@ -80,3 +80,4 @@ Route::get('/userpage/search', [UserPageController::class, 'search'])->name('use
 Route::get('/api/statistic/sales/days', [StatisticController::class, 'statisticSaleDay']);
 Route::get('/api/statistic/sales/days/chart', [StatisticController::class, 'statisticSaleDayChart']);
 Route::get('/api/statistic/sales/months', [StatisticController::class, 'statisticSaleMonth']);
+Route::get('/api/statistic/sales/years', [StatisticController::class, 'statisticSaleYear']);

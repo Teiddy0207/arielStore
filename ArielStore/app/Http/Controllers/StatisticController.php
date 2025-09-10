@@ -64,6 +64,18 @@ class StatisticController extends Controller
         return response()->json($Query);
     }
 
+    public function statisticSaleYear()
+    {
+        $Query = DB::table('orders')
+            ->select(DB::raw('YEAR(created_at) as year'), DB::raw('SUM(total_amount) as total_sales'))
+            ->where('status', 4) 
+            ->groupBy('year')
+            ->orderBy('year', 'asc')
+            ->get();
+
+        return response()->json($Query);
+    }
+
     public function statisticSaleDayChart()
     {
         $rows = DB::table('product_types as pt')
