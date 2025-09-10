@@ -441,13 +441,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <p><i class="bi bi-person"></i> ${o.customer_name}</p>
-                            <p><i class="bi bi-envelope"></i> ${d?.email ?? 'Không có'}</p>
-                            <p><i class="bi bi-geo-alt"></i> ${d?.address ?? 'Không rõ'}</p>
+                            <p><i class="bi bi-envelope"></i> ${o?.email ?? 'Không có'}</p>
+                            <p><i class="bi bi-geo-alt"></i> ${o?.address ?? 'Không rõ'}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><i class="bi bi-telephone"></i> ${d?.phone ?? 'Không có'}</p>
+                            <p><i class="bi bi-telephone"></i> ${o?.phone ?? 'Không có'}</p>
                             <p><i class="bi bi-calendar-event"></i> ${o.created_at}</p>
-                            <p><strong>Ghi chú:</strong> ${d?.note ?? 'Không có'}</p>
+                            <p><strong>Ghi chú:</strong> ${o?.note ?? 'Không có'}</p>
                         </div>
                     </div>
                 </div>
@@ -459,15 +459,18 @@
                             <tr>
                                 <th>Sản phẩm</th>
                                 <th>Số lượng</th>
-                                <th>Đơn giá</th>
+                                // <th>Đơn giá</th>
                                 <th>Thành tiền</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>${o.product_name}</td>
+                                <td>${d.product_name}</td>
+                              
+                              
                                 <td>${d?.quantity ?? 1}</td>
-                                <td>${Number(d.price).toLocaleString()} VND</td>
+                              
+                                // <td>${Number(d.price).toLocaleString()} VND</td>
                                 <td>${Number(o.total_amount).toLocaleString()} VND</td>
                             </tr>
                         </tbody>
