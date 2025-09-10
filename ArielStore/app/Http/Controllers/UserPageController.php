@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use App\Models\ShowProduct;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
@@ -84,7 +87,6 @@ class UserPageController extends Controller
     }
 
     $cart = session()->get('cart', []);
-
     $quantity = $request->input('quantity', 1);
 
     if (isset($cart[$id])) {
@@ -95,7 +97,7 @@ class UserPageController extends Controller
             'price' => $product->price,
             'original_price' => $product->import_price,
             'image' => $product->images->isNotEmpty() ? asset('storage/' . $product->images->first()->filename) : asset('images/d&g.jpg'),
-            'quantity' => $quantity, // Số lượng mặc định là 1
+            'quantity' => $quantity,
         ];
     }
 
@@ -137,11 +139,36 @@ public function checkout(Request $request)
         return redirect()->route('userpage.cart')->with('error', 'Giỏ hàng của bạn đang trống.');
     }
 
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'phone' => 'required|string|max:30',
+        'email' => 'required|email',
+        'address' => 'required|string',
+        'payment_method' => 'required|string',
+    ]);
+
     $total = array_reduce($cart, function ($sum, $item) {
         return $sum + $item['price'] * $item['quantity'];
     }, 0);
 
-    $orderId = rand(1000000000, 9999999999);
+    $orderId = DB::transaction(function () use ($validated, $cart, $total) {
+        $order = Order::create([
+            'customer_name' => $validated['name'],
+            'total_amount' => $total,
+            'status' => 1, // ví dụ: 1 = Mới tạo
+        ]);
+
+        foreach ($cart as $productId => $item) {
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'product_name' => $item['name'],
+                'phone' => $validated['phone'],
+                'quantity' => $item['quantity'],
+            ]);
+        }
+
+        return $order->id;
+    });
 
     session()->forget('cart');
 

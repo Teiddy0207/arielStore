@@ -23,7 +23,7 @@
     </div>
 
     <!-- Form Thông tin khách hàng -->
-    <form action="#" method="POST">
+    <form action="{{ route('userpage.checkoutpost') }}" method="POST">
         @csrf
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <input type="text" name="name" placeholder="Họ và tên" required 

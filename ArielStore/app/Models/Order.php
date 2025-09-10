@@ -11,7 +11,6 @@ class Order extends Model
 
     protected $fillable = [
         'customer_name',
-        'product_name',
         'total_amount',
         'status',
         'created_at'
@@ -24,7 +23,7 @@ class Order extends Model
     }
 
     public function details()
-{
-    return $this->hasOne(OrderDetail::class, 'order_id');
-}
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id');
+    }
 }

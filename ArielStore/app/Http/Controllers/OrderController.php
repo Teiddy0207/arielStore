@@ -14,13 +14,14 @@ class OrderController extends Controller
     public function getOrder(Request $request)
     {
         $status = $request->query('status');
- $search = $request->query('search'); 
-    $query = DB::table('orders')
+     $search = $request->query('search'); 
+     $query = DB::table('orders')
         ->join('statuses', 'orders.status', '=', 'statuses.id')
+        ->join('order_details', 'orders.id', '=', 'order_details.order_id')
         ->select(
             'orders.id',
             'orders.customer_name',
-            'orders.product_name',
+            'order_details.product_name',
             'orders.total_amount',
             'statuses.description as status',
             'orders.created_at'
@@ -58,11 +59,13 @@ public function getOrderDetail($id)
 {
     $order = DB::table('orders')
         ->join('statuses', 'orders.status', '=', 'statuses.id')
+                ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+
         ->where('orders.id', $id)
         ->select(
             'orders.id',
             'orders.customer_name',
-            'orders.product_name',
+            'order_details.product_name',
             'orders.total_amount',
             'statuses.description as status',
             'orders.created_at'
