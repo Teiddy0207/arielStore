@@ -71,7 +71,12 @@ class UserPageController extends Controller
 
     public function showSale()
     {
-        return view('userpage.sale');
+            $products = Product::with('images', 'productType')
+            ->where('status', 'Đang bán')
+            ->where('quantity', '>', 0)
+            ->where('sale', '>', 0)
+            ->get();
+        return view('userpage.sale',compact('products'));
     }
 
     public function showNew()
