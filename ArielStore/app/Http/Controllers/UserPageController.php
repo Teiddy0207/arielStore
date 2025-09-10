@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\ShowProduct;
 use App\Models\Product;
 use App\Models\Order;
@@ -20,6 +21,8 @@ class UserPageController extends Controller
     {
         $products = Product::with('images', 'productType')
             ->where('product_type_id', 1)
+            ->where('quantity', '>', 0)
+
             ->where('status', 'Đang bán')
             ->get();
         return view('userpage.shirt', compact('products'));
@@ -29,43 +32,49 @@ class UserPageController extends Controller
     {
         $products = Product::with('images', 'productType')
             ->where('product_type_id', 2)
+            ->where('quantity', '>', 0)
+
             ->where('status', 'Đang bán')
             ->get();
         return view('userpage.pant', compact('products'));
     }
 
-    public function showSkirt() 
+    public function showSkirt()
     {
-         $products = Product::with('images', 'productType')
+        $products = Product::with('images', 'productType')
             ->where('product_type_id', 3)
+            ->where('quantity', '>', 0)
+
             ->where('status', 'Đang bán')
             ->get();
         return view('userpage.skirt', compact('products'));
     }
 
-    public function showAccessories() 
+    public function showAccessories()
     {
-          $products = Product::with('images', 'productType')
+        $products = Product::with('images', 'productType')
             ->where('product_type_id', 4)
+            ->where('quantity', '>', 0)
             ->where('status', 'Đang bán')
             ->get();
         return view('userpage.accessories', compact('products'));
     }
 
-    public function showAll() 
+    public function showAll()
     {
         $products = Product::with('images', 'productType')
             ->where('status', 'Đang bán')
+            ->where('quantity', '>', 0)
             ->get();
         return view('userpage.all', compact('products'));
     }
 
-    public function showSale() 
+    public function showSale()
     {
         return view('userpage.sale');
     }
 
-    public function showNew() 
+    public function showNew()
     {
         return view('userpage.new');
     }
@@ -80,122 +89,119 @@ class UserPageController extends Controller
     }
 
     public function addToCart(Request $request, $id)
-{
-    $product = Product::find($id);
-    if (!$product) {
-        return redirect()->back()->with('error', 'Sản phẩm không tồn tại.');
-    }
-
-    $cart = session()->get('cart', []);
-    $quantity = $request->input('quantity', 1);
-
-    if (isset($cart[$id])) {
-        $cart[$id]['quantity'] += $quantity; 
-    } else {
-        $cart[$id] = [
-            'name' => $product->name,
-            'price' => $product->price,
-            'original_price' => $product->import_price,
-            'image' => $product->images->isNotEmpty() ? asset('storage/' . $product->images->first()->filename) : asset('images/d&g.jpg'),
-            'quantity' => $quantity,
-        ];
-    }
-
-    session()->put('cart', $cart);
-    
-    return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
-}
-    public function viewCart()
-{
-    $cart = session()->get('cart', []);
-
-    $total = array_reduce($cart, function ($carry, $item) {
-        return $carry + ($item['price'] * $item['quantity']);
-    }, 0);
-
-    return view('userpage.cart', compact('cart', 'total'));
-}
-public function showcheckout()
-{
-    $cart = session()->get('cart', []);
-
-    if (empty($cart)) {
-        return redirect()->route('userpage.cart')->with('error', 'Giỏ hàng của bạn đang trống.');
-    }
-
-    $total = array_reduce($cart, function ($sum, $item) {
-        return $sum + $item['price'] * $item['quantity'];
-    }, 0);
-
-    return view('userpage.checkout', compact('cart', 'total'));
-
-}
-
-public function checkout(Request $request)
-{
-    $cart = session()->get('cart', []);
-
-    if (empty($cart)) {
-        return redirect()->route('userpage.cart')->with('error', 'Giỏ hàng của bạn đang trống.');
-    }
-
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'phone' => 'required|string|max:30',
-        'email' => 'required|email',
-        'address' => 'required|string',
-        'payment_method' => 'required|string',
-        'note' => 'nullable|string'
-    ]);
-
-    $total = array_reduce($cart, function ($sum, $item) {
-        return $sum + $item['price'] * $item['quantity'];
-    }, 0);
-
-    $orderId = DB::transaction(function () use ($validated, $cart, $total) {
-        $order = Order::create([
-            'customer_name' => $validated['name'],
-            'phone' => $validated['phone'],
-            'email' => $validated['email'],
-            'address' => $validated['address'],
-            'note' => $validated['note'] ?? null,
-            'total_amount' => $total,
-            'status' => 1,
-        ]);
-
-        foreach ($cart as $productId => $item) {
-            $p = Product::find($productId);
-            OrderDetail::create([
-                'order_id' => $order->id,
-                'product_name' => $item['name'],
-                'price' => $item['price'],
-                'product_type_id' => $p?->product_type_id,
-            ]);
+    {
+        $product = Product::find($id);
+        if (!$product) {
+            return redirect()->back()->with('error', 'Sản phẩm không tồn tại.');
         }
 
-        return $order->id;
-    });
+        $cart = session()->get('cart', []);
+        $quantity = $request->input('quantity', 1);
 
-    session()->forget('cart');
+        if (isset($cart[$id])) {
+            $cart[$id]['quantity'] += $quantity;
+        } else {
+            $cart[$id] = [
+                'name' => $product->name,
+                'price' => $product->price,
+                'original_price' => $product->import_price,
+                'image' => $product->images->isNotEmpty() ? asset('storage/' . $product->images->first()->filename) : asset('images/d&g.jpg'),
+                'quantity' => $quantity,
+            ];
+        }
 
-    return redirect()->route('userpage.order-success', ['orderId' => $orderId]);
-}
+        session()->put('cart', $cart);
+
+        return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
+    }
+    public function viewCart()
+    {
+        $cart = session()->get('cart', []);
+
+        $total = array_reduce($cart, function ($carry, $item) {
+            return $carry + ($item['price'] * $item['quantity']);
+        }, 0);
+
+        return view('userpage.cart', compact('cart', 'total'));
+    }
+    public function showcheckout()
+    {
+        $cart = session()->get('cart', []);
+
+        if (empty($cart)) {
+            return redirect()->route('userpage.cart')->with('error', 'Giỏ hàng của bạn đang trống.');
+        }
+
+        $total = array_reduce($cart, function ($sum, $item) {
+            return $sum + $item['price'] * $item['quantity'];
+        }, 0);
+
+        return view('userpage.checkout', compact('cart', 'total'));
+    }
+
+    public function checkout(Request $request)
+    {
+        $cart = session()->get('cart', []);
+
+        if (empty($cart)) {
+            return redirect()->route('userpage.cart')->with('error', 'Giỏ hàng của bạn đang trống.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:30',
+            'email' => 'required|email',
+            'address' => 'required|string',
+            'payment_method' => 'required|string',
+            'note' => 'nullable|string'
+        ]);
+
+        $total = array_reduce($cart, function ($sum, $item) {
+            return $sum + $item['price'] * $item['quantity'];
+        }, 0);
+
+        $orderId = DB::transaction(function () use ($validated, $cart, $total) {
+            $order = Order::create([
+                'customer_name' => $validated['name'],
+                'phone' => $validated['phone'],
+                'email' => $validated['email'],
+                'address' => $validated['address'],
+                'note' => $validated['note'] ?? null,
+                'total_amount' => $total,
+                'status' => 1,
+            ]);
+
+            foreach ($cart as $productId => $item) {
+                $p = Product::find($productId);
+                OrderDetail::create([
+                    'order_id' => $order->id,
+                    'product_name' => $item['name'],
+                    'price' => $item['price'],
+                    'product_type_id' => $p?->product_type_id,
+                ]);
+            }
+
+            return $order->id;
+        });
+
+        session()->forget('cart');
+
+        return redirect()->route('userpage.order-success', ['orderId' => $orderId]);
+    }
 
 
- 
-public function orderSuccess($orderId)
-{
-    return view('userpage.order_success', compact('orderId'));
-}
 
-public function search(Request $request)
-{
-    $query = $request->input('query'); 
+    public function orderSuccess($orderId)
+    {
+        return view('userpage.order_success', compact('orderId'));
+    }
 
-    $products = ShowProduct::where('name', 'like', '%' . $query . '%')->get();
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
 
-    return view('userpage.search_results', compact('products', 'query'));
-}
+        $products = ShowProduct::where('name', 'like', '%' . $query . '%')->get();
 
-
+        return view('userpage.search_results', compact('products', 'query'));
+    }
 }
