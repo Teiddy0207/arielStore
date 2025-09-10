@@ -14,6 +14,7 @@ class OrderDetail extends Model
     protected $fillable = [
         'order_id',
         'product_name',
+        'price',
     ];
 
     // Mỗi chi tiết đơn hàng thuộc về 1 đơn hàng

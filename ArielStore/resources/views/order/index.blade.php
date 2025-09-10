@@ -436,7 +436,7 @@
                         <tr>
                             <td>${d.product_name}</td>
                             <td>1</td>
-                             <td>${Number(o.total_amount).toLocaleString()} VND</td>
+                            <td>${Number(d.price ?? 0).toLocaleString()} VND</td>
                         </tr>
                     `).join('');
 

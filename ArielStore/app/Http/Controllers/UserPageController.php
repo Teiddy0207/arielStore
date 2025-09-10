@@ -167,6 +167,7 @@ public function checkout(Request $request)
             OrderDetail::create([
                 'order_id' => $order->id,
                 'product_name' => $item['name'],
+                'price' => $item['price'],
             ]);
         }
 

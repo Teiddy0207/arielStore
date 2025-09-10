@@ -73,7 +73,7 @@ class OrderController extends Controller
 
         $details = DB::table('order_details')
             ->where('order_id', $id)
-            ->select('product_name')
+            ->select('product_name','price')
             ->get();
 
         return response()->json([
