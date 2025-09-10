@@ -16,8 +16,12 @@
 
 <body>
     @include('layouts.headerClient')
-    @yield('content')
+    <body class="min-h-screen flex flex-col">
+    <main class="flex-1">
+      @yield('content')
+    </main>
     @include('layouts.footerClient')
+  </body>
 </body>
 
 </html>
