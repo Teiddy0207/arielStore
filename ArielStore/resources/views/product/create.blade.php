@@ -69,14 +69,14 @@
 
                         <div class="row g-2 mb-3">
                             <div class="col">
-                                <label>Danh mục:</label>
-                                <select name="category" class="form-select" required>
-                                    <option value="">Chọn danh mục</option>
-                                    @foreach(['Áo', 'Quần', 'Váy', 'Phụ kiện'] as $cat)
-                                        <option value="{{ $cat }}" {{ old('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                                <label>Loại sản phẩm:</label>
+                                <select name="product_type_id" class="form-select" required>
+                                    <option value="">Chọn loại sản phẩm</option>
+                                    @foreach($productTypes as $productType)
+                                        <option value="{{ $productType->id }}" {{ old('product_type_id') == $productType->id ? 'selected' : '' }}>{{ $productType->description }}</option>
                                     @endforeach
                                 </select>
-                                @error('category') <small class="text-danger">{{ $message }}</small> @enderror
+                                @error('product_type_id') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
                             <div class="col">
                                 <label>Trạng thái:</label>

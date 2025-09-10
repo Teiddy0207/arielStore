@@ -85,14 +85,14 @@
 
                         <div class="row g-2 mb-3">
                             <div class="col">
-                                <label for="category" class="form-label">Danh mục:</label>
-                                <select name="category" id="category" class="form-select @error('category') is-invalid @enderror" required>
-                                    <option value="">Chọn danh mục</option>
-                                    @foreach(['Áo', 'Quần', 'Váy', 'Phụ kiện'] as $cat)
-                                        <option value="{{ $cat }}" {{ old('category', $product->category) == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                                <label for="product_type_id" class="form-label">Loại sản phẩm:</label>
+                                <select name="product_type_id" id="product_type_id" class="form-select @error('product_type_id') is-invalid @enderror" required>
+                                    <option value="">Chọn loại sản phẩm</option>
+                                    @foreach($productTypes as $productType)
+                                        <option value="{{ $productType->id }}" {{ old('product_type_id', $product->product_type_id) == $productType->id ? 'selected' : '' }}>{{ $productType->description }}</option>
                                     @endforeach
                                 </select>
-                                @error('category')
+                                @error('product_type_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

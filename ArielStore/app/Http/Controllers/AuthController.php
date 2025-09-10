@@ -17,9 +17,7 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Xử lý đăng nhập
-     */
+
     public function login(Request $request)
     {
         $request->validate([

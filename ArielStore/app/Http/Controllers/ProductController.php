@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductType;
 
 class ProductController extends Controller
 {
@@ -34,7 +35,8 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('product.create');
+        $productTypes = ProductType::all();
+        return view('product.create', compact('productTypes'));
     }
 
     public function store(Request $request)
@@ -50,7 +52,7 @@ class ProductController extends Controller
                 'quantity' => 'required|integer|min:0',
                 'size' => 'required|in:S,M,L,XL,XXL',
                 'status' => 'required|in:Đang bán,Hết hàng,Ngừng bán',
-                'category' => 'required|in:Áo,Quần,Váy,Phụ kiện',
+                'product_type_id' => 'required|exists:product_types,id',
                 'images.*' => 'image|max:5120',
             ]);
 
@@ -74,7 +76,6 @@ class ProductController extends Controller
 
             return redirect()->route('products.index')->with('success', 'Đã thêm sản phẩm mới thành công!');
         } catch (\Exception $e) {
-            \Log::error("Lỗi khi thêm sản phẩm: " . $e->getMessage());
             return redirect()->back()->with('error', 'Đã thêm sản phẩm mới thất bại!');
         }
     }
@@ -90,7 +91,8 @@ class ProductController extends Controller
         // Laravel sẽ tự động tìm Product dựa trên ID từ URL
         // và eager load images để tránh N+1 query
         $product->load('images');
-        return view('product.edit', compact('product'));
+        $productTypes = ProductType::all();
+        return view('product.edit', compact('product', 'productTypes'));
     }
 
     public function update(Request $request, Product $product)
@@ -104,7 +106,7 @@ class ProductController extends Controller
                 'sale' => 'nullable|numeric|min:0|max:100',
                 'quantity' => 'required|integer|min:0',
                 'size' => 'required|in:S,M,L,XL,XXL',
-                'category' => 'required|in:Áo,Quần,Váy,Phụ kiện',
+                'product_type_id' => 'required|exists:product_types,id',
                 'status' => 'required|in:Đang bán,Hết hàng,Ngừng bán',
                 'description' => 'nullable|string',
                 'new_images.*' => 'nullable|image|max:5120', // 5MB
@@ -131,7 +133,6 @@ class ProductController extends Controller
 
             return redirect()->route('products.index')->with('success', 'Đã sửa sản phẩm thành công!');
         } catch (\Exception $e) {
-            \Log::error("Lỗi khi sửa sản phẩm: " . $e->getMessage(), ['product_id' => $product->id]);
             return redirect()->back()->with('error', 'Đã sửa sản phẩm thất bại!');
         }
     }
@@ -147,7 +148,6 @@ class ProductController extends Controller
                 'message' => 'Ảnh đã được xóa thành công.'
             ]);
         } catch (\Exception $e) {
-            \Log::error("Lỗi khi xoá ảnh: " . $e->getMessage(), ['image_id' => $productImage->id]);
             return response()->json([
                 'success' => false,
                 'message' => 'Không thể xóa ảnh. Vui lòng thử lại.',
@@ -170,8 +170,9 @@ class ProductController extends Controller
 
             return redirect()->route('products.index')->with('success', 'Đã xoá sản phẩm thành công!');
         } catch (\Exception $e) {
-            \Log::error("Lỗi khi xoá sản phẩm: " . $e->getMessage(), ['product_id' => $id]);
             return redirect()->back()->with('error', 'Đã xoá sản phẩm thất bại!');
         }
     }
+
+    
 }

@@ -20,10 +20,16 @@ class Product extends Model
         'size',
         'status',
         'category',
+        'product_type_id',
     ];
 
     public function images()
     {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function productType()
+    {
+        return $this->belongsTo(ProductType::class);
     }
 }
