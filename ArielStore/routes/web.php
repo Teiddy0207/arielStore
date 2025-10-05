@@ -81,3 +81,14 @@ Route::get('/api/statistic/sales/days', [StatisticController::class, 'statisticS
 Route::get('/api/statistic/sales/days/chart', [StatisticController::class, 'statisticSaleDayChart']);
 Route::get('/api/statistic/sales/months', [StatisticController::class, 'statisticSaleMonth']);
 Route::get('/api/statistic/sales/years', [StatisticController::class, 'statisticSaleYear']);
+
+// API thống kê mới
+Route::get('/api/statistic/summary', [StatisticController::class, 'getSummaryData']);
+Route::get('/api/statistic/inventory', [StatisticController::class, 'inventoryStatistics']);
+Route::get('/api/statistic/customers', [StatisticController::class, 'customerAnalytics']);
+Route::get('/api/statistic/top-products', [StatisticController::class, 'topSellingProducts']);
+Route::get('/api/statistic/hourly-trend', [StatisticController::class, 'hourlyRevenueTrend']);
+
+// Export APIs
+Route::get('/api/statistic/export/sales-csv', [StatisticController::class, 'exportSalesCSV']);
+Route::get('/api/statistic/export/top-products-json', [StatisticController::class, 'exportTopProductsJSON']);
