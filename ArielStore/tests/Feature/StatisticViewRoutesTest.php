@@ -309,15 +309,15 @@ class StatisticViewRoutesTest extends TestCase
     public function it_contains_time_filter_dropdown()
     {
         // Arrange
-        $this->actingAs($this->user, 'employee');
+        $this->actingAs($this->user);
 
         // Act
         $response = $this->get(route('statistic.sales.months'));
 
         // Assert - Kiểm tra dropdown thời gian
-        $response->assertSee('dropdownToggle');
-        $response->assertSee('dropdownMenu');
-        $response->assertSee('Thời gian');
+        $response->assertSee('dropdownToggle', false);
+        $response->assertSee('dropdownMenu', false);
+        $response->assertSee('Thời gian', false);
     }
 
     /**
@@ -328,17 +328,17 @@ class StatisticViewRoutesTest extends TestCase
     public function it_contains_navigation_links_between_reports()
     {
         // Arrange
-        $this->actingAs($this->user, 'employee');
+        $this->actingAs($this->user);
 
         // Act
         $response = $this->get(route('statistic.sales.months'));
 
         // Assert - Kiểm tra navigation links
-        $response->assertSee(route('statistic.sales.days'));
-        $response->assertSee(route('statistic.sales.months'));
-        $response->assertSee(route('statistic.sales.years'));
-        $response->assertSee('Theo ngày');
-        $response->assertSee('Theo tháng');
-        $response->assertSee('Theo năm');
+        $response->assertSee(route('statistic.sales.days'), false);
+        $response->assertSee(route('statistic.sales.months'), false);
+        $response->assertSee(route('statistic.sales.years'), false);
+        $response->assertSee('Theo ngày', false);
+        $response->assertSee('Theo tháng', false);
+        $response->assertSee('Theo năm', false);
     }
 }
