@@ -73,7 +73,7 @@
                                 <select name="product_type_id" class="form-select" required>
                                     <option value="">Chọn loại sản phẩm</option>
                                     @foreach($productTypes as $productType)
-                                        <option value="{{ $productType->id }}" {{ old('product_type_id') == $productType->id ? 'selected' : '' }}>{{ $productType->description }}</option>
+                                        <option value="{{ $productType->id }}" {{ old('product_type_id') == $productType->id ? 'selected' : '' }}>{{ $productType->type_name }}</option>
                                     @endforeach
                                 </select>
                                 @error('product_type_id') <small class="text-danger">{{ $message }}</small> @enderror
