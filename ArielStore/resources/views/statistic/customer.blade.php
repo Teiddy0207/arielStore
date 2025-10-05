@@ -474,7 +474,7 @@
                 }]
             },
             options: {
-                indexAxis: 'y', // chuyển sang biểu đồ ngang
+                indexAxis: 'y', 
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {

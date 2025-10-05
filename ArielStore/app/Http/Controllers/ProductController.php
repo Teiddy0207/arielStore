@@ -43,18 +43,17 @@ class ProductController extends Controller
         try {
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'import_price' => 'required|numeric',
-                'price' => 'required|numeric',
-                'material' => 'nullable|string',
-                'sale' => 'nullable|numeric',
-                'description' => 'nullable|string',
-                'quantity' => 'required|integer|min:0',
+                'import_price' => 'required|integer|min:1',
+                'price' => 'required|integer|min:1',
+                'material' => 'nullable|string|max:255',
+                'sale' => 'nullable|integer|min:0|max:50',
+                'description' => 'nullable|string|max:500',
+                'quantity' => 'required|integer|min:1',
                 'size' => 'required|in:S,M,L,XL,XXL',
                 'status' => 'required|in:Đang bán,Hết hàng,Ngừng bán',
-                'product_type_id' => 'required|exists:product_types,id',
-                'images.*' => 'image|max:5120',
+                'type_name' => 'required|in:Quần,Áo,Váy,Phụ kiện',
+                'images.*' => 'nullable|image|max:5120',
             ]);
-
             $product = Product::create($validated);
 
             if ($request->hasFile('images')) {
@@ -173,5 +172,5 @@ class ProductController extends Controller
         }
     }
 
-    
+
 }

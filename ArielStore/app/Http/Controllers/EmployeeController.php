@@ -18,10 +18,10 @@ class EmployeeController extends Controller
                 $search = $request->search;
                 $query->where(function($q) use ($search) {
                     $q->where('id', 'like', "%{$search}%")
-                    ->orWhere('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('address', 'like', "%{$search}%")
-                    ->orWhere('birthday', 'like', "%{$search}%");
+                        ->orWhere('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('address', 'like', "%{$search}%")
+                        ->orWhere('birthday', 'like', "%{$search}%");
                 });
             }
             if ($request->filled('role')) {
@@ -33,7 +33,6 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Đã xảy ra lỗi khi tải danh sách nhân viên.']);
         }
-        
     }
 
     public function toggleActive(Employee $employee)
@@ -41,9 +40,9 @@ class EmployeeController extends Controller
         try {
             $employee->update(['is_active' => !$employee->is_active]);
             $action = $employee->is_active ? 'mở khóa' : 'khóa';
-            
+
             return redirect()->route('employee.index')->with('success', "Đã {$action} tài khoản nhân viên {$employee->name} thành công!");
-            
+
         } catch (\Exception $e) {
             return redirect()->route('employee.index')->with('error', "Đã xảy ra lỗi khi cập nhật tài khoản nhân viên: " . $e->getMessage());
         }
@@ -90,19 +89,19 @@ class EmployeeController extends Controller
             Employee::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => bcrypt($request->password),
+                'password' => $request->password, // lưu plain text
                 'birthday' => $request->birthday,
                 'role' => $request->role,
                 'address' => $request->address,
                 'is_active' => true
             ]);
 
-            return redirect()->route('employee.index')->with('success', 'Thêm mới tài khoản nhân viên ' . $request->name . ' thành công !');
+            return redirect()->route('employee.index')->with('success', 'Thêm mới thông tin nhân viên ' . $request->name . ' thành công !');
 
         } catch (\Exception $e) {
             return redirect()->back()
-                            ->withInput()
-                            ->with('error', 'Có lỗi xảy ra khi thêm nhân viên: ' . $e->getMessage());
+                ->withInput()
+                ->with('error', 'Có lỗi xảy ra khi thêm nhân viên: ' . $e->getMessage());
         }
     }
 
@@ -164,7 +163,7 @@ class EmployeeController extends Controller
             ];
 
             if ($request->filled('password')) {
-                $updateData['password'] = bcrypt($request->password);
+                $updateData['password'] = $request->password; // lưu plain text
             }
 
             $employee->update($updateData);
@@ -173,8 +172,8 @@ class EmployeeController extends Controller
 
         } catch (\Exception $e) {
             return redirect()->back()
-                            ->withInput()
-                            ->with('error', 'Có lỗi xảy ra khi cập nhật thông tin nhân viên: ' . $e->getMessage());
+                ->withInput()
+                ->with('error', 'Có lỗi xảy ra khi cập nhật thông tin nhân viên: ' . $e->getMessage());
         }
     }
 

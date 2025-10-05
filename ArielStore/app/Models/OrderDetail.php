@@ -15,6 +15,7 @@ class OrderDetail extends Model
         'order_id',
         'product_name',
         'price',
+        'product_type_id',
     ];
 
     // Mỗi chi tiết đơn hàng thuộc về 1 đơn hàng
