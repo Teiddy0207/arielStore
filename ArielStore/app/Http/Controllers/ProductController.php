@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
@@ -14,7 +15,6 @@ class ProductController extends Controller
     {
         $query = Product::with('images')->latest();
 
-        // Tìm kiếm theo mã hoặc tên
         if (request('search')) {
             $searchTerm = request('search');
             $query->where(function ($q) use ($searchTerm) {
@@ -59,9 +59,8 @@ class ProductController extends Controller
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $file) {
                     $path = $file->store('products', 'public');
-                    $filesize = round($file->getSize() / 1048576, 2) . 'M'; // MB
+                    $filesize = round($file->getSize() / 1048576, 2) . 'M';
                     $filetype = $file->getClientOriginalExtension();
-                    $originalName = $file->getClientOriginalName();
 
                     $product->images()->create([
                         'original_name' => $file->getClientOriginalName(),
@@ -73,7 +72,7 @@ class ProductController extends Controller
             }
 
             return redirect()->route('products.index')->with('success', 'Đã thêm sản phẩm mới thành công!');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('error', 'Đã thêm sản phẩm mới thất bại!');
         }
     }
@@ -86,8 +85,6 @@ class ProductController extends Controller
 
     public function edit(Product $product) // Sử dụng Route Model Binding
     {
-        // Laravel sẽ tự động tìm Product dựa trên ID từ URL
-        // và eager load images để tránh N+1 query
         $product->load('images');
         $productTypes = ProductType::all();
         return view('product.edit', compact('product', 'productTypes'));
@@ -116,9 +113,8 @@ class ProductController extends Controller
             if ($request->hasFile('new_images')) {
                 foreach ($request->file('new_images') as $file) {
                     $path = $file->store('products', 'public');
-                    $filesize = round($file->getSize() / 1048576, 2) . 'M'; // MB
+                    $filesize = round($file->getSize() / 1048576, 2) . 'M';
                     $filetype = $file->getClientOriginalExtension();
-                    $originalName = $file->getClientOriginalName();
 
                     $product->images()->create([
                         'original_name' => $file->getClientOriginalName(),
@@ -135,7 +131,6 @@ class ProductController extends Controller
         }
     }
 
-    // Phương thức xóa ảnh riêng lẻ (product-images.destroy)
     public function destroyImage(ProductImage $productImage)
     {
         try {
@@ -145,7 +140,7 @@ class ProductController extends Controller
                 'success' => true,
                 'message' => 'Ảnh đã được xóa thành công.'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Không thể xóa ảnh. Vui lòng thử lại.',
@@ -158,19 +153,64 @@ class ProductController extends Controller
     {
         try {
             $product = Product::with('images')->findOrFail($id);
-
-            // Xoá ảnh vật lý khỏi ổ đĩa
             foreach ($product->images as $image) {
                 Storage::disk('public')->delete($image->filename);
             }
-
             $product->delete();
-
             return redirect()->route('products.index')->with('success', 'Đã xoá sản phẩm thành công!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Đã xoá sản phẩm thất bại!');
         }
     }
+    private function validateProduct(Request $request)
+    {
+        $data = $request->all();            //1
 
+        if (empty($data['name'])) {         //2
+            return back()->withErrors(['name' => 'Tên sản phẩm là bắt buộc.'])->withInput();       //3
+        }
+        if (!is_string($data['name']) || strlen($data['name']) > 255) {                 //4
+            return back()->withErrors(['name' => 'Tên sản phẩm phải là chuỗi, tối đa 255 ký tự.'])->withInput();  //5
+        }
+
+        if (!isset($data['import_price']) || !is_numeric($data['import_price']) || $data['import_price'] < 1) {  //6
+            return back()->withErrors(['import_price' => 'Giá nhập phải là số nguyên ≥ 1.'])->withInput();  //7
+        }
+
+        if (!isset($data['price']) || !is_numeric($data['price']) || $data['price'] < 1) {  //8
+            return back()->withErrors(['price' => 'Giá bán phải là số nguyên ≥ 1.'])->withInput();  //9
+        }
+
+        if (!empty($data['material']) && strlen($data['material']) > 255) {         //10
+            return back()->withErrors(['material' => 'Chất liệu tối đa 255 ký tự.'])->withInput();  //11
+        }
+
+        if (isset($data['sale']) && (!is_numeric($data['sale']) || $data['sale'] < 0 || $data['sale'] > 50)) { //12
+            return back()->withErrors(['sale' => 'Giảm giá phải từ 0 đến 50%.'])->withInput();  //13
+        }
+
+        if (!empty($data['description']) && strlen($data['description']) > 500) {       //14
+            return back()->withErrors(['description' => 'Mô tả tối đa 500 ký tự.'])->withInput();  //15
+        }
+
+        if (!isset($data['quantity']) || !is_numeric($data['quantity']) || $data['quantity'] < 1) {     //16
+            return back()->withErrors(['quantity' => 'Số lượng phải là số nguyên ≥ 1.'])->withInput();      //17
+        }
+
+        $validSizes = ['S', 'M', 'L', 'XL', 'XXL'];     //18
+        if (empty($data['size']) || !in_array($data['size'], $validSizes)) {        //19
+            return back()->withErrors(['size' => 'Kích cỡ phải là S, M, L, XL hoặc XXL.'])->withInput();    //20
+        }
+
+        $validStatus = ['Đang bán', 'Hết hàng', 'Ngừng bán'];       //21
+        if (empty($data['status']) || !in_array($data['status'], $validStatus)) {       //22
+            return back()->withErrors(['status' => 'Trạng thái không hợp lệ.'])->withInput();       //23
+        }
+        $validTypes = ['Quần', 'Áo', 'Váy', 'Phụ kiện'];        //24
+        if (empty($data['type_name']) || !in_array($data['type_name'], $validTypes)) {      //25
+            return back()->withErrors(['type_name' => 'Loại sản phẩm không hợp lệ.'])->withInput();     //26
+        }
+        return $data;
+    }
 
 }
