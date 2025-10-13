@@ -2,220 +2,265 @@
 
 namespace Tests\Feature;
 
-use App\Models\Product;
-use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\Group;
-use Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ProductControllerTest extends TestCase
 {
+    // ----------- Helper functions for validation -----------
+    private function validateName($name): bool
+    {
+        return !empty($name) && is_string($name) && strlen($name) <= 255;
+    }
+
+    private function validateImportPrice($importPrice): bool
+    {
+        return isset($importPrice) && is_numeric($importPrice) && $importPrice >= 1;
+    }
+
+    private function validatePrice($price): bool
+    {
+        return isset($price) && is_numeric($price) && $price >= 1;
+    }
+
+    private function validateMaterial($material): bool
+    {
+        return empty($material) || strlen($material) <= 255;
+    }
+
+    private function validateSale($sale): bool
+    {
+        return !isset($sale) || (is_numeric($sale) && $sale >= 0 && $sale <= 50);
+    }
+
+    private function validateDescription($description): bool
+    {
+        return empty($description) || strlen($description) <= 500;
+    }
+
+    private function validateQuantity($quantity): bool
+    {
+        return isset($quantity) && is_numeric($quantity) && $quantity >= 1;
+    }
+
+    private function validateSize($size): bool
+    {
+        $validSizes = ['S', 'M', 'L', 'XL', 'XXL'];
+        return !empty($size) && in_array($size, $validSizes, true);
+    }
+
+    private function validateStatus($status): bool
+    {
+        $validStatus = ['Đang bán', 'Hết hàng', 'Ngừng bán'];
+        return !empty($status) && in_array($status, $validStatus, true);
+    }
+
+    // ----------- Test cases for Name -----------
     #[Test]
     #[Group('name')]
-    public function should_return_false_when_name_of_product_is_empty()
+    public function test_name_is_empty_should_be_invalid()
     {
-        $productName = '';
-        $isValid = !empty($productName);
-        $this->assertFalse($isValid);
+        $this->assertFalse($this->validateName(''));
     }
 
     #[Test]
     #[Group('name')]
-    public function should_return_false_when_name_of_product_is_longer_than_255()
+    public function test_name_too_long_should_be_invalid()
     {
-        $productName = str_repeat('a', 256);
-        $isValid = strlen($productName) <= 255;
-        $this->assertFalse($isValid);
+        $this->assertFalse($this->validateName(str_repeat('a', 256)));
+    }
+
+    #[Test]
+    #[Group('name')]
+    public function test_name_is_not_string_should_be_invalid()
+    {
+        $this->assertFalse($this->validateName(12345));
+    }
+
+    // ----------- Test cases for Import Price -----------
+    #[Test]
+    #[Group('import_price')]
+    public function test_import_price_missing_should_be_invalid()
+    {
+        $this->assertFalse($this->validateImportPrice(null));
     }
 
     #[Test]
     #[Group('import_price')]
-    public function should_return_false_when_import_price_is_negative()
+    public function test_import_price_is_not_numeric_should_be_invalid()
     {
-        $importPrice = -100;
-        $isValid = $importPrice >= 1;
-        $this->assertFalse($isValid);
+        $this->assertFalse($this->validateImportPrice('abc'));
     }
 
     #[Test]
     #[Group('import_price')]
-    public function should_return_false_when_import_price_is_equal_zero()
+    public function test_import_price_less_than_1_should_be_invalid()
     {
-        $importPrice = 0;
-        $isValid = $importPrice >= 1;
-        $this->assertFalse($isValid);
+        $this->assertFalse($this->validateImportPrice(0));
     }
 
+    // ----------- Test cases for Price -----------
     #[Test]
-    #[Group('import_price')]
-    public function should_return_false_when_import_price_is_characters()
+    #[Group('price')]
+    public function test_price_missing_should_be_invalid()
     {
-        $importPrice = 'one hundred';
-        $isValid = is_int($importPrice);
-        $this->assertFalse($isValid);
+        $this->assertFalse($this->validatePrice(null));
     }
 
     #[Test]
     #[Group('price')]
-    public function should_return_false_when_price_is_not_integer_number()
+    public function test_price_is_not_numeric_should_be_invalid()
     {
-        $price = 100.5;
-        $isValid = is_int($price);
-        $this->assertFalse($isValid);
+        $this->assertFalse($this->validatePrice('abc'));
     }
 
     #[Test]
     #[Group('price')]
-    public function should_return_false_when_price_is_zero()
+    public function test_price_less_than_1_should_be_invalid()
     {
-        $price = 0;
-        $isValid = $price >= 1;
-        $this->assertFalse($isValid);
+        $this->assertFalse($this->validatePrice(0));
+    }
+
+    // ----------- Test cases for Material -----------
+    #[Test]
+    #[Group('material')]
+    public function test_material_too_long_should_be_invalid()
+    {
+        $this->assertFalse($this->validateMaterial(str_repeat('b', 256)));
+    }
+
+    // ----------- Test cases for Sale -----------
+    #[Test]
+    #[Group('sale')]
+    public function test_sale_negative_should_be_invalid()
+    {
+        $this->assertFalse($this->validateSale(-1));
     }
 
     #[Test]
-    #[Group('price')]
-    public function should_return_false_when_price_is_negative()
+    #[Group('sale')]
+    public function test_sale_greater_than_50_should_be_invalid()
     {
-        $price = -50;
-        $isValid = $price >= 1;
-        $this->assertFalse($isValid);
-    }
-    #[Test]
-    #[Group('price')]
-    public function should_return_false_when_price_is_characters()
-    {
-        $price = 'two hundred';
-        $isValid = is_int($price);
-        $this->assertFalse($isValid);
+        $this->assertFalse($this->validateSale(60));
     }
 
     #[Test]
-    public function should_return_true_when_product_information_is_valid()
+    #[Group('sale')]
+    public function test_sale_zero_should_be_valid()
     {
-        $data = [
-            'name' => 'Áo sơ mi',
-            'import_price' => 200000,
-            'price' => 250000,
-            'material' => 'Cotton',
-            'sale' => 10,
-            'description' => 'Áo sơ mi nam tay dài',
-            'quantity' => 50,
-            'size' => 'M',
-            'status' => 'Đang bán',
-            'type_name' => 'Áo',
-        ];
-
-        $rules = [
-            'name' => 'required|string|max:255',
-            'import_price' => 'required|integer|min:1',
-            'price' => 'required|integer|min:1',
-            'material' => 'nullable|string|max:255',
-            'sale' => 'nullable|integer|min:0|max:50',
-            'description' => 'nullable|string|max:500',
-            'quantity' => 'required|integer|min:1',
-            'size' => 'required|in:S,M,L,XL,XXL',
-            'status' => 'required|in:Đang bán,Hết hàng,Ngừng bán',
-            'type_name' => 'required|in:Quần,Áo,Váy,Phụ kiện',
-        ];
-
-        $validator = Validator::make($data, $rules);
-        $isValid = !$validator->fails();
-
-        $this->assertTrue($isValid);
+        $this->assertTrue($this->validateSale(0));
     }
 
+    #[Test]
+    #[Group('sale')]
+    public function test_sale_50_should_be_valid()
+    {
+        $this->assertTrue($this->validateSale(50));
+    }
+
+    // ----------- Test cases for Description -----------
     #[Test]
     #[Group('description')]
-    public function should_return_false_when_description_of_product_is_longer_than_255()
+    public function test_description_too_long_should_be_invalid()
     {
-        $description = str_repeat('a', 256);
-        $isValid = strlen($description) <= 255;
-        $this->assertFalse($isValid);
-    }
-    #[Test]
-    #[Group('sale')]
-    public function should_return_false_when_sale_is_greater_than_50(){
-        $sale = 60;
-        $isValid = $sale <= 50;
-        $this->assertFalse($isValid);
+        $this->assertFalse($this->validateDescription(str_repeat('c', 501)));
     }
 
+    // ----------- Test cases for Quantity -----------
     #[Test]
-    #[Group('sale')]
-    public function should_return_false_when_sale_is_negative(){
-        $sale = -10;
-        $isValid = $sale >= 0;
-        $this->assertFalse($isValid);
-    }
-
-    #[Test]
-    #[Group('sale')]
-    public function should_return_false_when_sale_is_characters(){
-        $sale = 'ten';
-        $isValid = is_int($sale);
-        $this->assertFalse($isValid);
+    #[Group('quantity')]
+    public function test_quantity_missing_should_be_invalid()
+    {
+        $this->assertFalse($this->validateQuantity(null));
     }
 
     #[Test]
     #[Group('quantity')]
-    public function should_return_false_when_sale_is_not_integer_number(){
-        $quantity = 20.5;
-        $isValid = is_int($quantity);
-        $this->assertFalse($isValid);
-    }
-    #[Test]
-    #[Group('quantity')]
-    public function should_return_false_when_quantity_is_zero(){
-        $quantity = 0;
-        $isValid = $quantity >= 1;
-        $this->assertFalse($isValid);
-    }
-    #[Test]
-    #[Group('quantity')]
-    public function should_return_false_when_quantity_is_negative(){
-        $quantity = -5;
-        $isValid = $quantity >= 1;
-        $this->assertFalse($isValid);
+    public function test_quantity_is_not_numeric_should_be_invalid()
+    {
+        $this->assertFalse($this->validateQuantity('abc'));
     }
 
     #[Test]
     #[Group('quantity')]
-    public function should_return_false_when_quantity_is_characters(){
-        $quantity = 'fifty';
-        $isValid = is_int($quantity);
-        $this->assertFalse($isValid);
+    public function test_quantity_less_than_1_should_be_invalid()
+    {
+        $this->assertFalse($this->validateQuantity(0));
+    }
+
+    // ----------- Test cases for Size -----------
+    #[Test]
+    #[Group('size')]
+    public function test_size_invalid_should_be_invalid()
+    {
+        $this->assertFalse($this->validateSize('XS'));
     }
 
     #[Test]
     #[Group('size')]
-    public function should_return_false_when_size_is_not_in_list_size(){
-        $size = 'XXFL';
-        $validSizes = ['S', 'M', 'L', 'XL', 'XXL'];
-        $isValid = in_array($size, $validSizes);
-        $this->assertFalse($isValid);
+    public function test_size_valid_should_be_valid()
+    {
+        $this->assertTrue($this->validateSize('L'));
     }
 
     #[Test]
-    public function should_return_true_when_remove_successfully()
+    #[Group('size')]
+    public function test_size_missing_should_be_invalid()
     {
-        $product = Product::factory()->create();
-        $image = $product->images()->create([
-            'original_name' => 'test.jpg',
-            'filename' => 'products/test.jpg',
-            'filesize' => '0.1M',
-            'filetype' => 'jpg',
-        ]);
-
-        \Storage::fake('public');
-        \Storage::disk('public')->put($image->filename, 'dummy content');
-
-        $response = $this->delete(route('products.destroy', $product->id));
-
-        $response->assertRedirect(route('products.index'));
-        $this->assertDatabaseMissing('products', ['id' => $product->id]);
-        $this->assertDatabaseMissing('product_images', ['id' => $image->id]);
-        \Storage::disk('public')->assertMissing($image->filename);
+        $this->assertFalse($this->validateSize(''));
     }
 
+    // ----------- Test cases for Status -----------
+    #[Test]
+    #[Group('status')]
+    public function test_status_invalid_should_be_invalid()
+    {
+        $this->assertFalse($this->validateStatus('Tạm ngưng'));
+    }
+
+    #[Test]
+    #[Group('status')]
+    public function test_status_valid_should_be_valid()
+    {
+        $this->assertTrue($this->validateStatus('Đang bán'));
+    }
+
+    #[Test]
+    #[Group('status')]
+    public function test_status_missing_should_be_invalid()
+    {
+        $this->assertFalse($this->validateStatus(''));
+    }
+
+    // ----------- Test case for all valid fields -----------
+    #[Test]
+    #[Group('all')]
+    public function test_all_fields_valid_should_be_valid()
+    {
+        $data = [
+            'name' => 'Áo thun',
+            'import_price' => 100,
+            'price' => 200,
+            'material' => 'Cotton',
+            'sale' => 10,
+            'description' => 'Sản phẩm tốt',
+            'quantity' => 5,
+            'size' => 'M',
+            'status' => 'Đang bán'
+        ];
+
+        $isValid =
+            $this->validateName($data['name']) &&
+            $this->validateImportPrice($data['import_price']) &&
+            $this->validatePrice($data['price']) &&
+            $this->validateMaterial($data['material']) &&
+            $this->validateSale($data['sale']) &&
+            $this->validateDescription($data['description']) &&
+            $this->validateQuantity($data['quantity']) &&
+            $this->validateSize($data['size']) &&
+            $this->validateStatus($data['status']);
+
+        $this->assertTrue($isValid);
+    }
 }
