@@ -36,24 +36,6 @@
         <textarea name="address" placeholder="Địa chỉ giao hàng" required 
                   class="px-4 py-2 border rounded w-full mb-4"></textarea>
 
-        <!-- Phương thức thanh toán -->
-        <div class="mb-4">
-            <span class="block text-lg font-bold mb-2">Phương thức thanh toán</span>
-            <div class="flex flex-col space-y-2">
-                <label>
-                    <input type="radio" name="payment_method" value="COD" checked>
-                    Thanh toán khi nhận hàng (COD)
-                </label>
-                <label>
-                    <input type="radio" name="payment_method" value="bank_transfer">
-                    Chuyển khoản ngân hàng
-                </label>
-                <label>
-                    <input type="radio" name="payment_method" value="e_wallet">
-                    Ví điện tử
-                </label>
-            </div>
-        </div>
 
         <!-- Nút Xác nhận đặt hàng -->
         <button type="submit" 

@@ -6,6 +6,7 @@ use App\Models\ShowProduct;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -71,12 +72,12 @@ class UserPageController extends Controller
 
     public function showSale()
     {
-            $products = Product::with('images', 'productType')
+        $products = Product::with('images', 'productType')
             ->where('status', 'Đang bán')
             ->where('quantity', '>', 0)
             ->where('sale', '>', 0)
             ->get();
-        return view('userpage.sale',compact('products'));
+        return view('userpage.sale', compact('products'));
     }
 
     public function showNew()
@@ -93,25 +94,50 @@ class UserPageController extends Controller
         return view('userpage.product_detail', compact('product'));
     }
 
+
+    protected function validateAddToCart($product, $cart, $quantity) //1 
+    {
+        if (!$product) { //2
+            return ['status' => false, 'message' => 'Sản phẩm không tồn tại.']; //3 
+        }
+        if ($product->quantity <= 0) { //4 
+            return ['status' => false, 'message' => 'Sản phẩm hiện không khả dụng.']; //5
+        }
+        $currentInCart = isset($cart[$product->id]) ? $cart[$product->id]['quantity'] : 0; //6
+        if ($currentInCart + $quantity > $product->quantity) { //7
+            return ['status' => false, 'message' => "Số lượng đặt cho sản phẩm {$product->name} vượt quá số lượng trong kho ({$product->quantity})."]; //8
+        }
+
+        // Hợp lệ
+        return ['status' => true]; //9
+    }
+
     public function addToCart(Request $request, $id)
     {
         $product = Product::find($id);
         if (!$product) {
             return redirect()->back()->with('error', 'Sản phẩm không tồn tại.');
         }
-
+        if ($product->status !== 'Đang bán' || $product->quantity <= 0) {
+            return redirect()->back()->with('error', 'Sản phẩm hiện không khả dụng.');
+        }
         $cart = session()->get('cart', []);
-        $quantity = $request->input('quantity', 1);
+        $quantity = max(1, (int) $request->input('quantity', 1));
+        $currentInCart = isset($cart[$id]) ? $cart[$id]['quantity'] : 0;
+        if ($currentInCart + $quantity > $product->quantity) {
+            return redirect()->back()->with('error', "Số lượng đặt cho sản phẩm {$product->name} vượt quá số lượng trong kho ({$product->quantity}).");
+        }
 
         if (isset($cart[$id])) {
             $cart[$id]['quantity'] += $quantity;
         } else {
             $cart[$id] = [
                 'name' => $product->name,
-                'price' => $product->price,
-                'original_price' => $product->import_price,
+                'price' => $product->sale > 0 ? $product->price - ($product->price * $product->sale / 100) : $product->price,
+                'original_price' => $product->price,
                 'image' => $product->images->isNotEmpty() ? asset('storage/' . $product->images->first()->filename) : asset('images/d&g.jpg'),
                 'quantity' => $quantity,
+                'sale' => $product->sale, // lưu info sale nếu có
             ];
         }
 
@@ -119,6 +145,7 @@ class UserPageController extends Controller
 
         return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
     }
+
     public function viewCart()
     {
         $cart = session()->get('cart', []);
@@ -144,6 +171,78 @@ class UserPageController extends Controller
         return view('userpage.checkout', compact('cart', 'total'));
     }
 
+    protected function validateCheckout(Request $request)
+    {
+        $errors = [];
+        $name = trim($request->input('name', ''));
+        $phone = trim($request->input('phone', ''));
+        $email = trim($request->input('email', ''));
+        $address = trim($request->input('address', ''));
+        $note = $request->input('note', null); //1
+        if ($phone === '') { //2
+            $errors['phone'] = 'Vui lòng nhập số điện thoại.'; //3
+        } elseif (!preg_match('/^[0-9]{10}$/', $phone)) { //4
+            $errors['phone'] = 'Số điện thoại không hợp lệ (phải 10 chữ số).'; //5
+        }
+        $existingCustomer = User::where('phone', $phone)->exists();//6
+        if (!$existingCustomer) {//7
+            if ($name === '') { //8
+                $errors['name'] = 'Vui lòng nhập họ tên.'; //9
+            }
+            if ($email === '') { //10
+                $errors['email'] = 'Vui lòng nhập email.'; //11
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) { //12
+                $errors['email'] = 'Email không hợp lệ.'; //13
+            }
+            if ($address === '') { //14
+                $errors['address'] = 'Vui lòng nhập địa chỉ.'; //15 
+            }
+        }
+        return [ //16
+            'name' => $name,
+            'phone' => $phone,
+            'email' => $email,
+            'address' => $address,
+            'note' => $note,
+        ];
+    }
+
+    
+
+protected function calculateDiscount(bool $existingCustomer, float $subtotal)//1
+{
+    $threshold = 3000000; 
+    $nearDelta = 200000;   
+    $discountPercent = 0;
+    $message = null;
+    $near = false;//2
+
+    if (!$existingCustomer && $subtotal >= $threshold) {//3,4 
+        $discountPercent = 15; //5
+    } else {
+        if (!$existingCustomer) {//6
+            $discountPercent += 5; //7
+        }
+
+        if ($subtotal >= $threshold) {//8 
+            $discountPercent += 10; //9 
+        } else {
+            if ($threshold - $subtotal <= $nearDelta) {//10
+                $near = true;//11 
+                $message = 'Đơn hàng của bạn gần đạt 3.000.000 VND, sẽ được giảm giá 10% khi đạt mốc.';//12 
+            }
+        }
+    }
+    $discountAmount = round($subtotal * $discountPercent / 100, 0);//13
+    return [//14
+        'discount_percent' => $discountPercent,
+        'discount_amount' => $discountAmount,
+        'message' => $message,
+        'near_threshold' => $near,
+    ];
+}
+
+    
     public function checkout(Request $request)
     {
         $cart = session()->get('cart', []);

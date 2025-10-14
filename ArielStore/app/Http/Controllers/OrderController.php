@@ -11,6 +11,33 @@ class OrderController extends Controller
         return view('order.index');
     }
 
+
+    protected function validateSearchOrder(?string $search)
+{
+    
+    if ($search === '') {
+        throw new \Exception('Vui lòng nhập mã đơn hàng.');
+    }
+
+    if (!ctype_digit($search) && (int)$search <= 0) {
+        throw new \Exception('Mã đơn hàng phải là số nguyên dương.');
+    }
+
+    return (int)$search; 
+}
+protected function validateOrderStatus(?string $status)
+{//1
+    if ($status === null) {//2
+        return null; //3 
+    }
+
+    $status = trim($status);//4
+
+    if (!ctype_digit($status) || (int)$status <= 0) { //5,6
+        throw new \Exception('Trạng thái đơn hàng không hợp lệ.');//7
+    }
+    return (int)$status; //8
+}
     public function getOrder(Request $request)
     {
         $status = $request->query('status');
@@ -36,6 +63,21 @@ class OrderController extends Controller
         return response()->json($query->get());
     }
 
+
+    protected function validateOrderId(?string $orderId)
+{
+    if ($orderId === null) {
+        throw new \Exception('Vui lòng nhập mã đơn hàng.');
+    }
+
+    $orderId = trim($orderId);
+
+    if (!ctype_digit($orderId) || (int)$orderId <= 0) {
+        throw new \Exception('Mã đơn hàng phải là số nguyên dương.');
+    }
+
+    return (int)$orderId;
+}
 
     public function updateStatus(Request $request)
     {
