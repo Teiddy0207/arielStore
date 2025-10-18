@@ -55,7 +55,7 @@ class StatisticController extends Controller
     public function statisticSaleMonth()
     {
         $Query = DB::table('orders')
-            ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'), DB::raw('SUM(total_amount) as total_sales'))
+            ->select(DB::raw('strftime("%Y-%m", created_at) as month'), DB::raw('SUM(total_amount) as total_sales'))
             ->where('status', 4) 
             ->groupBy('month')
             ->orderBy('month', 'asc')
@@ -67,7 +67,7 @@ class StatisticController extends Controller
     public function statisticSaleYear()
     {
         $Query = DB::table('orders')
-            ->select(DB::raw('YEAR(created_at) as year'), DB::raw('SUM(total_amount) as total_sales'))
+            ->select(DB::raw('strftime("%Y", created_at) as year'), DB::raw('SUM(total_amount) as total_sales'))
             ->where('status', 4) 
             ->groupBy('year')
             ->orderBy('year', 'asc')
@@ -82,10 +82,10 @@ class StatisticController extends Controller
             ->leftJoin('order_details as od', 'od.product_type_id', '=', 'pt.id')
             ->leftJoin('orders as o', 'o.id', '=', 'od.order_id')
             ->where('o.status', 4)
-            ->groupBy('pt.id', 'pt.description')
+            ->groupBy('pt.id', 'pt.type_name')
             ->select(
                 'pt.id',
-                'pt.description',
+                'pt.type_name',
                 DB::raw('COUNT(od.id) as items')
             )
             ->get();
@@ -94,7 +94,7 @@ class StatisticController extends Controller
         $result = $rows->map(function ($r) use ($total) {
             return [
                 'type_id' => (int) $r->id,
-                'type_name' => $r->description,
+                'type_name' => $r->type_name,
                 'items' => (int) $r->items,
                 'ratio' => round($r->items / $total, 4),
                 'percent' => round($r->items * 100 / $total),
